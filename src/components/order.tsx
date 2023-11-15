@@ -8,7 +8,7 @@ const Order = () => {
     const [showModal, setShowModal] = useState(false);
 
     return (
-        <div className='p-1 w-[360px] h-screen fixed bg-white z-20 top-0 right-0'>
+        <div className='p-1 w-[360px] h-screen fixed bg-white z-40 top-0 right-0'>
             <div className='pl-5 pb-2 pt-1
             '>
                 <h1 className='text-2xl font-semibold'>

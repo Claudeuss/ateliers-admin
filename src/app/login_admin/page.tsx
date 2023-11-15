@@ -65,7 +65,7 @@ const Page = () => {
                                 </div>
                             </div>
                             <div className='flex justify-center'>
-                                <button className="tracking-wider bg-[#1B24FF] text-[#ffffff] py-3 px-6 font-mono font-black hover:bg-black hover:text-white text-center rounded-full transition-all duration-500 w-full"><a href="" >
+                                <button className="tracking-wider bg-[#1B24FF] text-[#ffffff] py-3 px-6 font-mono font-black hover:bg-black hover:text-white text-center rounded-full transition-all duration-500 w-full"><a href="/" >
                                     Confirm
                                 </a>
                                 </button>

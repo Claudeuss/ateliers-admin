@@ -38,7 +38,9 @@
     "src/components/cassier_homepage/home.jsx",
     "src/app/casier_homepage/page.jsx",
     "src/components/custom_radio.tsx",
-    "src/app/detail_sparepart/page.jsx"
+    "src/app/detail_sparepart/page.jsx",
+    "src/components/Carousel.tsx",
+    "src/components/Carousel.tsx"
   ],
   "exclude": [
     "node_modules"

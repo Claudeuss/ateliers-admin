@@ -1,13 +1,30 @@
+"use client";
 import ItemSparepart from '@/components/item_sparepart';
 import Order from '@/components/order';
-import PopupCostumer from '@/components/popup_costumer';
+
 import Sidebar from '@/components/sidebar';
-import Image from 'next/image';
-import { Fragment, useState } from 'react';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { AiOutlineMinusCircle } from 'react-icons/ai';
-import { FaRegTrashAlt } from 'react-icons/fa';
+import { User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+
+import { Fragment, useEffect, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+import { auth } from '../../lib/firebase/page';
+import SidebarGudang from '@/components/sidebar_gudang';
+
 export default function Home() {
+  const { push } = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (!currentUser) {
+
+        push('/login_admin');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <Fragment>
@@ -17,6 +34,7 @@ export default function Home() {
         <div className='pl-28 pr-[360px]'>
           <div className='px-5 py-3'>
             <div>
+              <h1>Welcome to the Main Page,!</h1>
               <h1 className='text-2xl font-semibold'>List Sparepart</h1>
               <div className='pt-3 grid grid-cols-4 gap-3 '>
                 <div className="bg-white hover:bg-[#1B24FF] py-1 pb-2  group cursor-pointer hover:shadow-lg shadow-md">
@@ -56,3 +74,5 @@ export default function Home() {
 
   );
 }
+
+

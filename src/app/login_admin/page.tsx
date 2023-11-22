@@ -1,7 +1,35 @@
+'use client';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import Image from 'next/image';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { FormEvent, useState } from 'react';
+import { auth } from '../../../lib/firebase/page';
+
 
 const Page = () => {
+    const { push } = useRouter();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const onSubmit = (e: FormEvent) => {
+        signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+
+            push("/");
+
+
+        }
+        ).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorMessage);
+            console.log(errorCode)
+        });
+        e.preventDefault();
+        console.log("onSubmit");
+        console.log(email);
+        console.log(password);
+    };
     return (
         <div>
             <>
@@ -41,15 +69,15 @@ const Page = () => {
                         <div className='flex justify-center mt-3'>
                             <h1 className='text-center text-3xl font-semibold font-mono'>Hello Again!</h1>
                         </div>
-                        <div className='px-24 py-20'>
+                        <form className='px-24 py-20' onSubmit={onSubmit}>
                             <div className='pb-2'>
                                 <div className='flex border-b border-black '>
                                     <img className='my-auto h-5 w-5' src="assets/images/imel.png" alt="" />
                                     <input className='pl-2 w-full text-black py-2 outline-none focus:none'
                                         type="email"
                                         placeholder="Email"
-
-
+                                        id="email"
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -59,8 +87,8 @@ const Page = () => {
                                     <input className='pl-2 w-full text-black py-2  outline-none focus:none'
                                         type="password"
                                         placeholder="Password"
-
-
+                                        id="password"
+                                        onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -74,7 +102,7 @@ const Page = () => {
 
 
 
-                        </div>
+                        </form>
 
                     </div>
 

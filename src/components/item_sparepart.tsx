@@ -5,7 +5,7 @@ const ItemSparepart = () => {
         <div>
             <div className='grid grid-cols-4 gap-3 pt-3'>
                 <div className="rounded-md bg-white p-2 group cursor-pointer hover:shadow-md shadow-lg ">
-                    <a href="/detail_service">
+                    <a href="/detail_sparepart">
 
                         <img className='m-auto h-32 w-32' src="assets/images/ban motor.png" alt="" />
                         <div className='flex justify-between p-2'>

@@ -1,11 +1,29 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { AiOutlineMinusCircle } from 'react-icons/ai';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import PopupCostumer from './popup_costumer';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../lib/firebase/page';
+
 const Order = () => {
     const [showModal, setShowModal] = useState(false);
+    let [count, setCount] = useState(0);
+
+
+
+
+    function incrementCount() {
+        count = count + 1;
+        setCount(count);
+    }
+    function decrementCount() {
+        if (count > 0) {
+            count = count - 1;
+            setCount(count);
+        }
+    }
 
     return (
         <div className='p-1 w-[360px] h-screen fixed bg-white z-40 top-0 right-0'>
@@ -15,7 +33,7 @@ const Order = () => {
                     Orders
                 </h1>
             </div>
-            <div className='w-auto h-[312px] pl-6 pr-2 overflow-y-auto overflow-x-hidden '>
+            <div className='w-auto h-[300px] pl-6 pr-2 overflow-y-auto overflow-x-hidden '>
                 <div className='bg-white w-auto h-14 my-1  shadow-md flex'>
                     <img className='h-12 w-12 my-auto mx-1' src="/assets/images/ban.png" alt="" />
                     <div className='my-auto mx-1'>
@@ -24,7 +42,25 @@ const Order = () => {
 
                     </div>
                     <div className='ml-5 my-auto flex items-center'>
-                        <AiOutlineMinusCircle className='text-[#471919] text-lg' />
+                        <button onClick={decrementCount}><AiOutlineMinusCircle className='text-[#595959] text-lg' /></button>
+                        <p className='p-2'>{count}</p>
+                        <button onClick={incrementCount}><AiOutlinePlusCircle className='text-[#595959] text-lg' /></button>
+
+                        <FaRegTrashAlt className='text-red-500 text-md ml-[30px]' />
+
+                    </div>
+
+
+                </div>
+                <div className='bg-white w-auto h-14 my-1  shadow-md flex'>
+                    <img className='h-12 w-12 my-auto mx-1' src="/assets/images/ban.png" alt="" />
+                    <div className='my-auto mx-1'>
+                        <h1 className='font-semibold'>Ban Tubles</h1>
+                        <p className='text-[#595959] text-xs font-semibold'>Rp. 15.000.000,0</p>
+
+                    </div>
+                    <div className='ml-5 my-auto flex items-center'>
+                        <AiOutlineMinusCircle className='text-[#595959] text-lg' />
                         <p className='p-2'>23</p>
                         <AiOutlinePlusCircle className='text-[#595959] text-lg' />
 
@@ -42,7 +78,7 @@ const Order = () => {
 
                     </div>
                     <div className='ml-5 my-auto flex items-center'>
-                        <AiOutlineMinusCircle className='text-[#471919] text-lg' />
+                        <AiOutlineMinusCircle className='text-[#595959] text-lg' />
                         <p className='p-2'>23</p>
                         <AiOutlinePlusCircle className='text-[#595959] text-lg' />
 
@@ -60,7 +96,7 @@ const Order = () => {
 
                     </div>
                     <div className='ml-5 my-auto flex items-center'>
-                        <AiOutlineMinusCircle className='text-[#471919] text-lg' />
+                        <AiOutlineMinusCircle className='text-[#595959] text-lg' />
                         <p className='p-2'>23</p>
                         <AiOutlinePlusCircle className='text-[#595959] text-lg' />
 
@@ -78,25 +114,7 @@ const Order = () => {
 
                     </div>
                     <div className='ml-5 my-auto flex items-center'>
-                        <AiOutlineMinusCircle className='text-[#471919] text-lg' />
-                        <p className='p-2'>23</p>
-                        <AiOutlinePlusCircle className='text-[#595959] text-lg' />
-
-                        <FaRegTrashAlt className='text-red-500 text-md ml-[30px]' />
-
-                    </div>
-
-
-                </div>
-                <div className='bg-white w-auto h-14 my-1  shadow-md flex'>
-                    <img className='h-12 w-12 my-auto mx-1' src="/assets/images/ban.png" alt="" />
-                    <div className='my-auto mx-1'>
-                        <h1 className='font-semibold'>Ban Tubles</h1>
-                        <p className='text-[#595959] text-xs font-semibold'>Rp. 15.000.000,0</p>
-
-                    </div>
-                    <div className='ml-5 my-auto flex items-center'>
-                        <AiOutlineMinusCircle className='text-[#471919] text-lg' />
+                        <AiOutlineMinusCircle className='text-[#595959] text-lg' />
                         <p className='p-2'>23</p>
                         <AiOutlinePlusCircle className='text-[#595959] text-lg' />
 
@@ -115,7 +133,7 @@ const Order = () => {
 
                     </div>
                     <div className='ml-5 my-auto flex items-center'>
-                        <AiOutlineMinusCircle className='text-[#471919] text-lg' />
+                        <AiOutlineMinusCircle className='text-[#595959] text-lg' />
                         <p className='p-2'>23</p>
                         <AiOutlinePlusCircle className='text-[#595959] text-lg' />
 
@@ -160,6 +178,7 @@ const Order = () => {
                     Payment
                 </a>
                 </button>
+
             </div>
 
             <PopupCostumer isVisible={showModal} onClose={() => setShowModal(false)} />

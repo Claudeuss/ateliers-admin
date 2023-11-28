@@ -1,14 +1,35 @@
+'use client'
 import Sidebar from '@/components/sidebar'
+import SidebarGudang from '@/components/sidebar_gudang'
 import Stockitem from '@/components/stockitem'
-import React from 'react'
+import { QuerySnapshot, collection, doc, getDocs } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs'
 import { SlSocialDropbox } from 'react-icons/sl'
+import { db } from '../../../../../lib/firebase/page'
+
+const [sparepart, setSparepart] = useState<any[]>([])
+const itemCollectionRef = collection(db, 'sparepart')
+
+useEffect(
+    () => {
+        const getSparepart = async () => {
+            try {
+                const data: QuerySnapshot = await getDocs(itemCollectionRef);
+                setSparepart(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            } catch (error) {
+                console.error('Error', error);
+            }
+        };
+        getSparepart();
+    }, []
+);
 
 const sparepartpage = () => {
     return (
         <>
-            <Sidebar />
+            <SidebarGudang />
             <div className=' w-screen pl-28 bg-[#EAEAEA]'>
                 <div className=' p-5'>
                     <h1 className=' text-2xl font-semibold'>Sparepart</h1>
@@ -22,7 +43,9 @@ const sparepartpage = () => {
                             <div className=' flex px-5 justify-between'>
                                 <div className='flex gap-5 justify-between'>
                                     <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Sparepart Data</p>
-                                    <p className=' text-lg font-medium text-black py-1 px-2 rounded-md'>Add Spareparts</p>
+                                    <a href="/warehouse_admin/sparepart/input_spareparts">
+                                        <p className=' text-lg font-medium text-black py-1 px-2 rounded-md'>Add Spareparts</p>
+                                    </a>
                                 </div>
                                 <div className=' w-96 py-2 bg-[#EAEAEA] flex rounded-md px-2'>
                                     <BiSearch className=' text-slate-700 text-xl' />
@@ -42,16 +65,19 @@ const sparepartpage = () => {
                                         </tr>
                                     </thead>
                                     <tbody className=' '>
-                                        <tr>
-                                            <td className='w-10 py-1 text-center border-b border-r'>1</td>
-                                            <td className='w-64 py-1 text-center border-b border-r truncate text-ellipsis line-clamp-1 px-2'>Akrapovic nih bous senggol, dounj hDVMAJFDRH FHCFAYRJScyfvtaYSdcv</td>
-                                            <td className=' w-64 py-1 text-center border-b border-r'> RP.1.200.000</td>
-                                            <td className=' w-56 py-1 text-center border-b border-r'>Accesories</td>
-                                            <td className=' w-56 py-1 text-center border-b border-r'>100</td>
-                                            <td className=' py-1 text-center border-b'>
-                                                <BsTrash3 className=' text-xl m-auto' />
-                                            </td>
-                                        </tr>
+
+                                        {sparepart.map((item) => (
+                                            <tr>
+                                                <td className='w-10 py-1 text-center border-b border-r'>1</td>
+                                                <td className='w-64 py-1 text-center border-b border-r truncate text-ellipsis line-clamp-1 px-2'>{item.name}</td>
+                                                <td className=' w-64 py-1 text-center border-b border-r'>{item.price}</td>
+                                                <td className=' w-56 py-1 text-center border-b border-r'>{item.category}</td>
+                                                <td className=' w-56 py-1 text-center border-b border-r'>{item.quantity}</td>
+                                                <td className=' py-1 text-center border-b'>
+                                                    <BsTrash3 className=' text-xl m-auto' />
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>

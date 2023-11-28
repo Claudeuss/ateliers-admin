@@ -1,4 +1,5 @@
-import Sidebar from '@/components/sidebar'
+'use client'
+import SidebarGudang from '@/components/sidebar_gudang'
 import React from 'react'
 import { BiEdit } from 'react-icons/bi'
 import { BsSearch, BsTrash3 } from 'react-icons/bs'
@@ -6,7 +7,7 @@ import { BsSearch, BsTrash3 } from 'react-icons/bs'
 const UserPage = () => {
     return (
         <>
-            <Sidebar />
+            <SidebarGudang />
             <div className=' pl-28 w-full h-screen bg-[#eaeaea]'>
                 <div className='p-5'>
                     <div className=' justify-between flex'>

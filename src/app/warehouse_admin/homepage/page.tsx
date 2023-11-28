@@ -1,4 +1,4 @@
-import Sidebar from '@/components/sidebar'
+import SidebarGudang from '@/components/sidebar_gudang';
 import Stockitem from '@/components/stockitem';
 import React from 'react'
 import { BsBoxSeam, BsBoxes } from "react-icons/bs";
@@ -7,7 +7,7 @@ import { SlSocialDropbox } from "react-icons/sl";
 const WarehouseDashboard = () => {
     return (
         <>
-            <Sidebar />
+            <SidebarGudang />
             <div className=' h-full w-screen pl-28 bg-[#EAEAEA] overflow-x-hidden'>
                 <div className=' p-5 overflow-y-auto overflow-x-hidden'>
                     <p className=' text-2xl font-semibold'>

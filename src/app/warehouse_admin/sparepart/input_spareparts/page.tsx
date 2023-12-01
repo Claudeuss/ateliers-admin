@@ -18,10 +18,10 @@ const AddPage = () => {
             setCount(count);
         }
     }
-    const [newName, setNewName] = useState("")
-    const [newType, setNewType] = useState("")
-    const [newCategory, setNewCategory] = useState("")
-    const [newPrice, setNewPRice] = useState("")
+    const [newName, setNewName] = useState('')
+    const [newType, setNewType] = useState('')
+    const [newCategory, setNewCategory] = useState('')
+    const [newPrice, setNewPRice] = useState('')
     const [downloadURL, setDownloadURL] = useState('')
     const [loading, setLoading] = useState(false)
     const [img, setImg] = useState('')
@@ -82,17 +82,24 @@ const AddPage = () => {
     }
 
     const AddData = async () => {
-        addDoc(usersCollectionRef, {
-            name: newName,
-            type: newType,
-            price: price,
-            assets: downloadURL,
-            quantity: count,
-            category: newCategory
+        alert('Adding data...');
+        try {
+            // Add the document to the collection
+            await addDoc(usersCollectionRef, {
+                name: newName, // Corrected: Assign newName to the 'name' field
+                type: newType,
+                price: price,
+                assets: downloadURL,
+                quantity: count,
+                category: newCategory
+            });
 
-        })
-    }
-
+            alert('Data added successfully.');
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+            alert('Error adding data: ' + errorMessage);
+        }
+    };
 
     return (
         <>

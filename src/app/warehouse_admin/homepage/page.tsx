@@ -1,10 +1,28 @@
+'use client';
 import SidebarGudang from '@/components/sidebar_gudang';
 import Stockitem from '@/components/stockitem';
-import React from 'react'
+import { QuerySnapshot, collection, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react'
 import { BsBoxSeam, BsBoxes } from "react-icons/bs";
 import { SlSocialDropbox } from "react-icons/sl";
+import { db } from '../../../../lib/firebase/page';
 
 const WarehouseDashboard = () => {
+    const [spareparts, setSparepart] = useState<any[]>([]);
+    const itemCollectionRef = collection(db, 'sparepart');
+
+    useEffect(() => {
+        const getSpareparts = async () => {
+            try {
+                const data = await getDocs(itemCollectionRef);
+                setSparepart(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            } catch (error) {
+                console.error('Error fetching spareparts:', error);
+            }
+        };
+
+        getSpareparts();
+    }, []);
     return (
         <>
             <SidebarGudang />
@@ -15,9 +33,18 @@ const WarehouseDashboard = () => {
                     </p>
                     <div className=' px-5'>
                         <div className=' grid grid-cols-3 gap-4 py-4'>
-                            <Stockitem icon={<BsBoxes className=" text-white m-auto text-4xl" />} title={'Total Stock'} total={'1000'} />
-                            <Stockitem icon={<BsBoxSeam className=" text-white m-auto text-4xl" />} title={'Low Stock'} total={'100'} />
-                            <Stockitem icon={<SlSocialDropbox className=" text-white m-auto text-4xl" />} title={'Empty Stock'} total={'10'} />
+                            <Stockitem
+                                icon={<BsBoxes className=" text-white m-auto text-4xl" />}
+                                title={'Total Stock'}
+                                total={spareparts.filter((item) => item.quantity >= 1).length} />
+                            <Stockitem
+                                icon={<BsBoxSeam className=" text-white m-auto text-4xl" />}
+                                title={'Low Stock'}
+                                total={spareparts.filter((item) => item.quantity < 10 && item.quantity >= 1).length} />
+                            <Stockitem
+                                icon={<SlSocialDropbox className=" text-white m-auto text-4xl" />}
+                                title={'Empty Stock'}
+                                total={spareparts.filter((item) => item.quantity === 0).length} />
                         </div>
 
                         {/* Table User */}

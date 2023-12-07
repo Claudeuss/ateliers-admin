@@ -59,6 +59,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
             type: type,
             price: price,
             quantity: count,
+            category: selectedCategory
         });
         alert('Edit Success')
         router.push('/warehouse_admin/sparepart/sparepartpage')
@@ -101,7 +102,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                                     placeholder='Product Name'
                                     type="radio"
                                     className=' w-5 checked:accent-blue-700'
-                                    onChange={() => setNewCategory("Accesories")}
+                                    onChange={() => setSelectedCategory("Accesories")}
                                     checked={selectedCategory === "Accesories"} />
                             </div>
                             <div className='flex gap-2'>
@@ -111,7 +112,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                                     placeholder='Product Name'
                                     type="radio"
                                     className='w-5 checked:accent-blue-700'
-                                    onChange={() => setNewCategory("Wheels")}
+                                    onChange={() => setSelectedCategory("Wheels")}
                                     checked={selectedCategory === "Wheels"} />
                             </div>
                             <div className='flex gap-2'>
@@ -121,7 +122,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                                     placeholder='Product Name'
                                     type="radio"
                                     className='w-5 checked:accent-blue-700'
-                                    onChange={() => setNewCategory("Maintenance")}
+                                    onChange={() => setSelectedCategory("Maintenance")}
                                     checked={selectedCategory === "Maintenance"} />
                             </div>
                             <div className='flex gap-2'>
@@ -131,7 +132,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                                     placeholder='Product Name'
                                     type="radio"
                                     className='w-5 checked:accent-blue-700'
-                                    onChange={() => setNewCategory("Engine")}
+                                    onChange={() => setSelectedCategory("Engine")}
                                     checked={selectedCategory === "Engine"} />
                             </div>
                         </div>

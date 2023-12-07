@@ -26,8 +26,6 @@ const AddPage = () => {
     const [loading, setLoading] = useState(false)
     const [img, setImg] = useState('')
     const usersCollectionRef = collection(db, "sparepart")
-    const price = 'Rp ' + newPrice
-
 
     const handleSelectedFile = (filee: { files: any; }) => {
         const files = filee.files
@@ -88,7 +86,7 @@ const AddPage = () => {
             await addDoc(usersCollectionRef, {
                 name: newName, // Corrected: Assign newName to the 'name' field
                 type: newType,
-                price: price,
+                price: newPrice,
                 assets: downloadURL,
                 quantity: count,
                 category: newCategory
@@ -192,7 +190,12 @@ const AddPage = () => {
                                                 <BiMinus className=' text-lg' />
                                             </div>
                                         </div>
-                                        <p>{count}</p>
+                                        <input
+                                            className=' w-20 text-center bg-blue-300'
+                                            type="text"
+                                            value={count}
+                                        />
+                                        {/* <p>{count}</p> */}
                                         <div onClick={incrementCount}>
                                             <div className=' p-1 border-l rounded-md border-black bg-slate-200'>
                                                 <BiPlus className=' text-lg' />

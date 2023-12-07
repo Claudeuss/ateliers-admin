@@ -93,6 +93,14 @@ const AddPage = () => {
             });
 
             alert('Data added successfully.');
+
+            // Reset form-related states
+            setNewName('');
+            setNewType('');
+            setNewCategory('');
+            setNewPRice('');
+            setDownloadURL('');
+            setCount(0);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
             alert('Error adding data: ' + errorMessage);
@@ -194,6 +202,7 @@ const AddPage = () => {
                                             className=' w-20 text-center bg-blue-300'
                                             type="text"
                                             value={count}
+                                            onChange={(event) => setCount(parseFloat(event.target.value))}
                                         />
                                         {/* <p>{count}</p> */}
                                         <div onClick={incrementCount}>

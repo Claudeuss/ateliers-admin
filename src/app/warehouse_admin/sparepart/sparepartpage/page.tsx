@@ -112,19 +112,19 @@ const sparepartpage = () => {
                                     <tbody className=''>
 
                                         {spareparts.map((item, index) => (
-                                            <tr key={item.id} className=''>
-                                                <td className='w-10 py-1 text-center border-b border-r'>{index + 1}</td>
-                                                <td className='w-64 py-1 text-center border-b border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
-                                                <td className=' w-64 py-1 text-center border-b border-r'>{item.price}</td>
-                                                <td className=' w-56 py-1 text-center border-b border-r'>{item.category}</td>
-                                                <td className=' w-56 py-1 text-center border-b border-r'>{item.quantity}</td>
-                                                <td className=' px-2 py-2 border-b flex'>
-                                                    <div className='w-full h-full hover:bg-blue-800 hover:text-white py-1 rounded-md'
+                                            <tr key={item.id} className='border-b'>
+                                                <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
+                                                <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
+                                                <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
+                                                <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
+                                                <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
+                                                <td className=' h-auto px-2 py-2 flex m-auto'>
+                                                    <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'
                                                         onClick={() => handleUpdateClick(item.id)}
                                                     >
                                                         <BiEdit className='mx-auto text-xl ' />
                                                     </div>
-                                                    <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md'
+                                                    <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto'
                                                         onClick={() => handleDelete(item.id)}
                                                     >
                                                         <BsTrash3 className='mx-auto text-xl ' />

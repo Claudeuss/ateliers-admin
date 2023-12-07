@@ -1,13 +1,14 @@
-'use client'
-import SidebarGudang from '@/components/sidebar_gudang'
-import Stockitem from '@/components/stockitem'
-import { QuerySnapshot, collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
-import { BiEdit, BiSearch } from 'react-icons/bi'
-import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs'
-import { SlSocialDropbox } from 'react-icons/sl'
-import { db } from '../../../../../lib/firebase/page'
-import { useRouter } from 'next/navigation'
+"use client";
+import SidebarGudang from '@/components/sidebar_gudang';
+import Stockitem from '@/components/stockitem';
+import { QuerySnapshot, collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { BiEdit, BiSearch } from 'react-icons/bi';
+import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs';
+import { SlSocialDropbox } from 'react-icons/sl';
+import { db } from '../../../../../lib/firebase/page';
+import { useRouter } from 'next/navigation';
+import EditSparepartForm from '@/components/EditSparepartForm';
 
 interface Sparepart {
     id: string;
@@ -19,8 +20,12 @@ interface Sparepart {
 
 const sparepartpage = () => {
     const [spareparts, setSparepart] = useState<any[]>([]);
-    const itemCollectionRef = collection(db, 'sparepart')
+    const itemCollectionRef = collection(db, 'sparepart');
     const router = useRouter();
+    const [newName, setNewName] = useState('')
+    const [newType, setNewType] = useState('')
+    const [newCategory, setNewCategory] = useState('')
+    const [newPrice, setNewPRice] = useState('')
     useEffect(
         () => {
             const getSparepart = async () => {
@@ -54,9 +59,18 @@ const sparepartpage = () => {
         }
     };
 
-    const handleUpdateClick = (id: any) => {
+    const handleUpdateClick = async (id: any) => {
         router.push(`/warehouse_admin/sparepart/edit?id=${id}`);
-    }
+
+        const docRef = doc(db, "sparepart", id);
+        const docSnap = await getDoc(docRef);
+        let data: any[] = [];
+
+        data.push(docSnap.data());
+        setNewName(data[0].newName);
+        setNewType(data[0].newType);
+    };
+
 
     return (
         <>

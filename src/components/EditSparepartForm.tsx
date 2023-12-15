@@ -39,7 +39,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                     setName(data.name);
                     setType(data.type)
                     setPrice(data.price);
-                    setQuantity(data.quantity);
+                    setCount(data.quantity);
 
                     // Fetch selected category
                     setSelectedCategory(data.category || '');
@@ -158,6 +158,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                                     className=' w-20 text-center  '
                                     type="text"
                                     value={count}
+                                    onChange={(event) => setCount(parseFloat(event.target.value))}
                                 />
                                 {/* <p>{count}</p> */}
                                 <div onClick={incrementCount}>

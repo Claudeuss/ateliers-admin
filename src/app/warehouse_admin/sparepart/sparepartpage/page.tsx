@@ -8,7 +8,6 @@ import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs';
 import { SlSocialDropbox } from 'react-icons/sl';
 import { db } from '../../../../../lib/firebase/page';
 import { useRouter } from 'next/navigation';
-import EditSparepartForm from '@/components/EditSparepartForm';
 
 interface Sparepart {
     id: string;
@@ -39,6 +38,17 @@ const sparepartpage = () => {
 
             getSparepart();
         }, []
+    );
+
+    // Search Function
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const filteredSpareparts = spareparts.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Delete Item Function
@@ -92,9 +102,15 @@ const sparepartpage = () => {
                                         <p className=' text-lg font-medium text-black py-1 px-2 rounded-md'>Add Spareparts</p>
                                     </a>
                                 </div>
-                                <div className=' w-96 py-2 bg-[#EAEAEA] flex rounded-md px-2'>
-                                    <BiSearch className=' text-slate-700 text-xl' />
-                                    <input type="text" name="search" id="" className=' w-full px-2 bg-transparent border-none outline-none' />
+                                <div className=' w-96 py-1 bg-[#EAEAEA] flex rounded-md px-2 gap-1'>
+                                    <BiSearch className=' text-slate-700 text-xl m-auto' />
+                                    <input
+                                        placeholder='Search...'
+                                        type="text"
+                                        name="search"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                        className=' w-full px-2 bg-transparent border-none outline-none' />
                                 </div>
                             </div>
                             <div className=' mt-2 h-[340px] overflow-y-scroll'>
@@ -111,7 +127,7 @@ const sparepartpage = () => {
                                     </thead>
                                     <tbody className=''>
 
-                                        {spareparts.map((item, index) => (
+                                        {filteredSpareparts.map((item, index) => (
                                             <tr key={item.id} className='border-b'>
                                                 <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
                                                 <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
@@ -124,7 +140,7 @@ const sparepartpage = () => {
                                                     >
                                                         <BiEdit className='mx-auto text-xl ' />
                                                     </div>
-                                                    <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto'
+                                                    <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto  '
                                                         onClick={() => handleDelete(item.id)}
                                                     >
                                                         <BsTrash3 className='mx-auto text-xl ' />

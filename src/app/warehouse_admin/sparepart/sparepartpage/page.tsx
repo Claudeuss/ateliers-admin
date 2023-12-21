@@ -52,22 +52,34 @@ const sparepartpage = () => {
     );
 
     // Delete Item Function
+    // ...
+
+    // Delete Item Function
     const handleDelete = async (id: string) => {
-        console.log('Deleting item with ID:', id);
+        // Display a confirmation dialog
+        const isConfirmed = window.confirm('Are you sure you want to delete this item?');
 
-        try {
-            // Delete the document with the specified ID
-            await deleteDoc(doc(db, 'sparepart', id));
+        // If the user confirms, proceed with deletion
+        if (isConfirmed) {
+            console.log('Deleting item with ID:', id);
 
-            // Log after deletion
-            console.log('Item deleted. Updating local state.');
+            try {
+                // Delete the document with the specified ID
+                await deleteDoc(doc(db, 'sparepart', id));
 
-            // Update the local state to remove the deleted item
-            setSparepart((prevSpareparts) => prevSpareparts.filter((item) => item.id !== id));
-        } catch (error) {
-            console.error('Error deleting data:', error);
+                // Log after deletion
+                console.log('Item deleted. Updating local state.');
+
+                // Update the local state to remove the deleted item
+                setSparepart((prevSpareparts) => prevSpareparts.filter((item) => item.id !== id));
+            } catch (error) {
+                console.error('Error deleting data:', error);
+            }
         }
     };
+
+    // ...
+
 
     const handleUpdateClick = async (id: any) => {
         router.push(`/warehouse_admin/sparepart/edit?id=${id}`);

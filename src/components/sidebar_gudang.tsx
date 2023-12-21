@@ -14,7 +14,7 @@ const SidebarGudang = () => {
             </div>
 
             <div>
-                <a href="/">
+                <a href="/warehouse_admin/homepage">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <RxDashboard className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <p className="text-center text-[#595959] text-xs group-hover:text-white font-semibold ">Home
@@ -23,21 +23,21 @@ const SidebarGudang = () => {
                 </a>
                 {/* Menu */}
 
-                <a href="/service">
+                <a href="/warehouse_admin/sparepart/sparepartpage">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <LiaToolsSolid className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold ">Sparepart
                         </h3>
                     </div>
                 </a>
-                <a href="/service">
+                <a href="/warehouse_admin/transaction">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <BiTransferAlt className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold ">Activity
                         </h3>
                     </div>
                 </a>
-                <a href="/service">
+                <a href="/warehouse_admin/user">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <PiUserCircleLight className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold ">User

@@ -22,62 +22,56 @@ const AddPage = () => {
     const [newType, setNewType] = useState('')
     const [newCategory, setNewCategory] = useState('')
     const [newPrice, setNewPRice] = useState('')
-    const [downloadURL, setDownloadURL] = useState('')
+    const [newDesc, setNewDesc] = useState('');
+    const [downloadURL, setDownloadURL] = useState<string[]>([]);
     const [loading, setLoading] = useState(false)
     const [img, setImg] = useState('')
     const usersCollectionRef = collection(db, "sparepart")
 
-    const handleSelectedFile = (filee: { files: any; }) => {
-        const files = filee.files
-        if (files && files[0].size < 10000000) {
-            setImg(files[0])
-            try {
-                console.log(files)
-                if (files) {
-                    setLoading(true)
-                    const name = files[0].name
-                    const imgRef = ref(storage, `files/${name}`)
-                    const uploadTask = uploadBytesResumable(imgRef, files[0])
+    const handleSelectedFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+
+        if (files && files.length > 0) {
+            setLoading(true);
+
+            const uploadTasks = Array.from(files).map((file) => {
+                return new Promise<string>(async (resolve, reject) => {
+                    const storageRef = ref(storage, `sparepart_images/${file.name}`);
+                    const uploadTask = uploadBytesResumable(storageRef, file);
 
                     uploadTask.on(
                         'state_changed',
                         (snapshot) => {
-                            const progress =
-                                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                            console.log(progress)
+                            // Handle progress (if needed)
                         },
                         (error) => {
-                            alert(error.message)
+                            // Handle error
+                            reject(error.message);
                         },
                         () => {
-
+                            // Upload completed successfully, get download URL
                             getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                                //url is download url of file
-                                console.log(url)
-                                setDownloadURL(url)
-                                setLoading(false)
-                            })
-                        },
-                    )
+                                resolve(url);
+                            });
+                        }
+                    );
+                });
+            });
 
+            try {
+                const downloadURLs = await Promise.all(uploadTasks);
+                console.log(downloadURLs); // Array of download URLs
 
-
-                } else {
-                    alert("error")
-                }
-
-
-
-
+                setDownloadURL((prevDownloadURLs) => [...prevDownloadURLs, ...downloadURLs]);
             } catch (error) {
-                console.error("An error occured", error);
+                alert(error);
+            } finally {
+                setLoading(false);
             }
-
-            console.log(files[0])
         } else {
-            alert('File size to large')
+            alert('No files selected');
         }
-    }
+    };
 
     const AddData = async () => {
         alert('Adding data...');
@@ -87,6 +81,7 @@ const AddPage = () => {
                 name: newName, // Corrected: Assign newName to the 'name' field
                 type: newType,
                 price: newPrice,
+                description: newDesc,
                 assets: downloadURL,
                 quantity: count,
                 category: newCategory
@@ -99,7 +94,8 @@ const AddPage = () => {
             setNewType('');
             setNewCategory('');
             setNewPRice('');
-            setDownloadURL('');
+            setNewDesc('');
+            setDownloadURL([]);
             setCount(0);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
@@ -113,10 +109,12 @@ const AddPage = () => {
             <div className=' pl-28 bg-[#EAEAEA]'>
                 <div className='p-5'>
                     <h1 className=' text-2xl font-semibold pb-4'>Sparepart</h1>
-                    <div className=' w-full h-[500px] bg-white rounded-md py-2'>
+                    <div className=' w-full h-full bg-white rounded-md py-2'>
                         <div className='flex gap-5 px-4 pb-2'>
                             <a href="/warehouse_admin/sparepart/sparepartpage">
-                                <p className=' text-lg font-medium text-black py-1 px-2 rounded-md'>Spareparts Data</p>
+                                <p className=' text-lg font-medium text-black py-1 px-2 rounded-md'>
+                                    Spareparts Data
+                                </p>
                             </a>
                             <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Add Sparepart</p>
                         </div>
@@ -186,7 +184,7 @@ const AddPage = () => {
                                     required
                                     onChange={(event) => setNewPRice(event.target.value)}
                                     placeholder='Product Price'
-                                    type="number"
+                                    type="text"
                                     className=' w-3/4 bg-white rounded-md border border-slate-400 outline-blue-700 px-2' />
                             </div>
                             <div className=' flex justify-between py-2'>
@@ -199,7 +197,7 @@ const AddPage = () => {
                                             </div>
                                         </div>
                                         <input
-                                            className=' w-20 text-center bg-blue-300'
+                                            className=' w-20 text-center '
                                             type="text"
                                             value={count}
                                             onChange={(event) => setCount(parseFloat(event.target.value))}
@@ -213,11 +211,28 @@ const AddPage = () => {
                                     </div>
                                 </div>
                             </div>
+                            {/* Form Input Description */}
+                            <div className=' flex justify-between py-2'>
+                                <p className='text-xl font-semibold'>Description</p>
+                                {/* <input
+                                    type="text"
+                                    placeholder='Add Description'
+                                    maxLength={200}
+                                    className=' w-3/4 h-28 bg-white rounded-md border border-slate-400 outline-blue-700 px-2'
+                                /> */}
+                                <textarea
+                                    name=""
+                                    id=""
+                                    onChange={(event) => setNewDesc(event.target.value)}
+                                    className=' min-h-[100px] w-3/4 bg-white rounded-md border border-slate-400 outline-blue-700 px-2 py-1'
+                                    placeholder='Add Description'
+                                />
+                            </div>
                             <div className=' flex justify-between py-2'>
                                 <p className='text-xl font-semibold'>Image</p>
                                 <input
                                     required
-                                    onChange={(files) => handleSelectedFile(files.target)}
+                                    onChange={handleSelectedFile}
                                     multiple
                                     type="file"
                                     className='block w-3/4 border rounded-lg border-slate-400 file:bg-[#1b24ff] file:py-1 file:px-4 file:rounded-md  file:border-0 file:text-white font-medium file:font-semibold file:hover:bg-[#1b23ffe1] hover:bg-slate-100' id='multiple_files' />

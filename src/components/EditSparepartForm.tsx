@@ -2,21 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../lib/firebase/page';
+import { db, storage } from '../../lib/firebase/page';
 import { BiMinus, BiPlus } from 'react-icons/bi';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-const EditSparepartForm = ({ namee }: { namee?: any }) => {
+const EditSparepartForm = ({ }: {}) => {
+
+    // variabel
     const [name, setName] = useState('');
     const [type, setType] = useState('')
-    const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState(0);
-    const [newCategory, setNewCategory] = useState('')
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [desc, setDesc] = useState('');
     const searchParams = useSearchParams();
-    const id = searchParams.get('id')
+    const id = searchParams.get('id');
     const [selectedCategory, setSelectedCategory] = useState('');
     const router = useRouter();
 
+    // variabel Quantity
     let [count, setCount] = useState(0);
     function incrementCount() {
         setCount((prevCount) => prevCount + 1)
@@ -40,6 +45,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                     setType(data.type)
                     setPrice(data.price);
                     setCount(data.quantity);
+                    setDesc(data.description);
 
                     // Fetch selected category
                     setSelectedCategory(data.category || '');
@@ -54,16 +60,67 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
 
     const handleUpdate = async (idd: any) => {
         const docRef = doc(db, 'sparepart', idd);
-        await updateDoc(docRef, {
-            name: name,
-            type: type,
-            price: price,
-            quantity: count,
-            category: selectedCategory
-        });
-        alert('Edit Success')
-        router.push('/warehouse_admin/sparepart/sparepartpage')
+
+        // Check if new files are selected
+        if (selectedFiles.length > 0) {
+            const storagePromises = selectedFiles.map((file, index) => {
+                const storageRef = ref(storage, `files/${file.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                return new Promise<string>(async (resolve, reject) => {
+                    try {
+                        await uploadTask;
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        resolve(downloadURL);
+                    } catch (error) {
+                        console.error(`Error uploading image ${index + 1}:`, error);
+                        reject(error);
+                    }
+                });
+            });
+
+            try {
+                // Wait for all upload tasks to complete
+                const downloadURLs = await Promise.all(storagePromises);
+
+                // Update document with new image URLs
+                await updateDoc(docRef, {
+                    name: name,
+                    type: type,
+                    price: price,
+                    quantity: count,
+                    category: selectedCategory,
+                    assets: downloadURLs, // Assuming 'imageUrl' is the field for the image URL
+                });
+
+                alert('Edit Success');
+                router.push('/warehouse_admin/sparepart/sparepartpage');
+            } catch (error) {
+                console.error('Error uploading images:', error);
+            }
+        } else {
+            // No new files selected, update document without changing the image URLs
+            await updateDoc(docRef, {
+                name: name,
+                type: type,
+                price: price,
+                quantity: count,
+                category: selectedCategory,
+            });
+
+            alert('Edit Success');
+            router.push('/warehouse_admin/sparepart/sparepartpage');
+        }
     };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            setSelectedFiles(Array.from(files));
+        }
+    };
+
+
 
     return (
         <div className='w-full pl-28 bg-[#EAEAEA] overflow-hidden'>
@@ -141,9 +198,20 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                         Price
                         <input
                             className=' w-3/4 text-base bg-white rounded-md border border-slate-400 outline-blue-700 px-2'
-                            type="number"
+                            type="text"
                             value={price}
-                            onChange={(e) => setPrice(parseFloat(e.target.value))} />
+                            onChange={(e) => setPrice(e.target.value)} />
+                    </label>
+                    <label className=' w-full flex justify-between text-xl font-semibold py-2'>
+                        Price
+                        <textarea
+                            name=""
+                            id=""
+                            value={desc}
+                            onChange={(event) => setDesc(event.target.value)}
+                            className=' text-base font-normal min-h-[100px] w-3/4 bg-white rounded-md border border-slate-400 outline-blue-700 px-2 py-1'
+                            placeholder='Add Description'
+                        />
                     </label>
                     <label className='w-full flex justify-between text-xl font-semibold py-2'>
                         Qty
@@ -173,6 +241,7 @@ const EditSparepartForm = ({ namee }: { namee?: any }) => {
                         Image
                         <input
                             multiple
+                            onChange={handleFileChange}
                             className='block w-3/4 border rounded-lg border-slate-400 file:bg-[#1b24ff] file:py-1 file:px-4 file:rounded-md  file:border-0 file:text-white font-medium text-base file:hover:bg-[#1b23ffce] hover:bg-slate-100' id='multiple_files'
                             type="file"
                         />

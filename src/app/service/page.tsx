@@ -22,7 +22,6 @@ const Service = () => {
         return () => unsubscribe();
     }, []);
     const [showDetail, setShowItem] = useState(false);
-    // const [showModal, setShowModal] = useState(false);
     return (
         <div>
 
@@ -32,32 +31,15 @@ const Service = () => {
                 <div className='pl-28 pr-[360px]'>
                     <div className='px-5 py-3'>
                         <div>
-                            <h1 className='text-2xl font-semibold'>List Sparepart</h1>
-                            <div className='pt-3 grid grid-cols-3
-                           
-                           
-                           
-                           gap-3 '>
-                                <div className="bg-white hover:bg-[#1B24FF] py-1 pb-2  group cursor-pointer hover:shadow-lg shadow-md">
+                            <div className='flex justify-between'>
+                                <h1 className='text-2xl font-semibold pb-4'>List Sparepart</h1>
+                                <button className="tracking-wider bg-black text-[#ffffff] py-1   hover:bg-[#1a1a1a] hover:text-white text-center rounded-md transition-all duration-500 w-[300px] mb-2" onClick={() => setShowItem(true)}>
+                                    Service
 
-                                    <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Accesories
-                                    </h3>
-                                </div>
-                                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg  shadow-md">
-
-                                    <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Wheels
-                                    </h3>
-                                </div>
-                                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ">
-
-                                    <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Engine
-                                    </h3>
-                                </div>
-
-
-
-
+                                </button>
                             </div>
+
+
                             <ItemService />
 
                         </div>

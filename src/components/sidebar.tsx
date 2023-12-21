@@ -44,14 +44,14 @@ const Sidebar = () => {
 
 
                 <div className='absolute inset-x-0 bottom-7 px-7'>
-                    <button onClick={userSignOut}>
+                    <div onClick={userSignOut}>
 
-                        <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg">
+                        <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                             <MdOutlineLogout className="text-[#595959] group-hover:text-white mx-auto text-3xl" />
                             <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold ">Logout
                             </h3>
                         </div>
-                    </button>
+                    </div>
 
 
                 </div>

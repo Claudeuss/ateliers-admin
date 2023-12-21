@@ -30,7 +30,7 @@ export default function Home() {
     <Fragment>
       <Sidebar />
 
-      <div className='bg-[#EAEAEA] h-screen w-screen'>
+      <div className='bg-[#EAEAEA] h-screen w-full'>
         <div className='pl-28 pr-[360px]'>
           <div className='px-5 py-3'>
             <div>

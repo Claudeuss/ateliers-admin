@@ -30,16 +30,40 @@ const Page = ({ }) => {
 
 
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            if (!currentUser) {
 
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                try {
+                    // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+                    const userDocRef = doc(db, 'account', currentUser.uid);
+                    const userDocSnapshot = await getDoc(userDocRef);
+
+                    if (userDocSnapshot.exists()) {
+                        const userRole = userDocSnapshot.data().role;
+
+                        if (userRole === 'kasir') {
+
+                        } else if (userRole === 'gudang') {
+                            push('/warehouse_admin/homepage');
+                        } else {
+                            // Handle other roles or no role as needed
+                        }
+                    } else {
+                        // Handle the case where user data doesn't exist in the database
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            } else {
                 push('/login_admin');
             }
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [auth, push]);
+
     let slides = [
         newAssets[0],
         newAssets[1],
@@ -89,10 +113,11 @@ const Page = ({ }) => {
     const calculatedTotalPrice = parseFloat(newPrice) * count;
 
     const handleAddToOrder = async () => {
-        router.push('/');
+
 
         const orderData = {
             sparepart: id,
+
             name: newName,
             category: newCategory,
             price: newPrice,
@@ -111,7 +136,7 @@ const Page = ({ }) => {
             if (sparepartDoc.exists()) {
                 const sparepartQuantity = sparepartDoc.data().quantity;
 
-                if (sparepartQuantity > 0) {
+                if (sparepartQuantity >= count) { // Check if sparepart quantity is sufficient
                     // Check if an order with the same sparepart ID already exists
                     const querySnapshot = await getDocs(query(collection(db, 'orders'), where('sparepart', '==', id)));
 
@@ -133,8 +158,8 @@ const Page = ({ }) => {
                         console.log('Document written with ID:', docRef.id);
                     }
                 } else {
-                    // Alert when the sparepart quantity is 0
-                    alert('Barang habis. Tidak dapat menambahkan ke pesanan.');
+                    // Alert when the sparepart quantity is insufficient
+                    alert('Barang tidak mencukupi. Tidak dapat menambahkan ke pesanan.');
                 }
             } else {
                 console.error('Sparepart document not found for ID:', id);
@@ -142,6 +167,7 @@ const Page = ({ }) => {
         } catch (error) {
             console.error('Error adding/updating document:', error);
         }
+        router.push('/');
     };
 
 

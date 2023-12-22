@@ -4,7 +4,7 @@ import PopupForm from './popup_form';
 import { QuerySnapshot, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase/page';
 
-const PopupCostumer = ({ isVisible, onClose, onSelect }: { isVisible?: any, onClose?: any, onSelect?: any }) => {
+const PopupCostumer = ({ isVisible, onClose, onSelect, onSelectId }: { isVisible?: any, onClose?: any, onSelect?: any, onSelectId?: any }) => {
     const [showModul, setShowModul] = useState(false);
 
     const usersCollectionRef = collection(db, "users")
@@ -77,13 +77,23 @@ const PopupCostumer = ({ isVisible, onClose, onSelect }: { isVisible?: any, onCl
                                         <td><p className='text-center'>{user.adress}</p></td>
                                         <td><p className='text-center'>{user.came}</p></td>
                                         <td><p className='text-center'>{user.category}</p></td>
-                                        <td> <button className="py-1 bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full " onClick={() => {
-                                            onClose(); // Close the PopupCostumer component
-                                            isVisible && onSelect(user.name, user.adress); // Trigger onSelect with the selected customer's name
-                                        }}>
-                                            Add+
 
-                                        </button></td>
+
+                                        <td>
+                                            <button className="py-1 bg-[#1b23ff] text-[#ffffff] text-xs hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full "
+                                                onClick={() => {
+                                                    onSelect(user.id);
+                                                    onSelectId(user.name);
+                                                    // Pass the selected customer's ID to the parent component
+                                                    onClose(); // Close the customer modal
+                                                }}
+                                            >
+                                                Add+
+                                            </button>
+                                        </td>
+
+
+
                                     </tr>
                                 ))}
 

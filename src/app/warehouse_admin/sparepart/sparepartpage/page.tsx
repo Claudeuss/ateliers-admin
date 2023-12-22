@@ -6,8 +6,9 @@ import React, { useEffect, useState } from 'react';
 import { BiEdit, BiSearch } from 'react-icons/bi';
 import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs';
 import { SlSocialDropbox } from 'react-icons/sl';
-import { db } from '../../../../../lib/firebase/page';
+import { auth, db } from '../../../../../lib/firebase/page';
 import { useRouter } from 'next/navigation';
+import { onAuthStateChanged } from 'firebase/auth';
 
 interface Sparepart {
     id: string;
@@ -25,6 +26,41 @@ const sparepartpage = () => {
     const [newType, setNewType] = useState('')
     const [newCategory, setNewCategory] = useState('')
     const [newPrice, setNewPRice] = useState('')
+
+    const { push } = useRouter();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                try {
+                    // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+                    const userDocRef = doc(db, 'account', currentUser.uid);
+                    const userDocSnapshot = await getDoc(userDocRef);
+
+                    if (userDocSnapshot.exists()) {
+                        const userRole = userDocSnapshot.data().role;
+
+                        if (userRole === 'gudang') {
+                            push('/warehouse_admin/sparepart/sparepartpage');
+                        } else if (userRole === 'kasir') {
+                            push('/');
+                        } else {
+                            // Handle other roles or no role as needed
+                        }
+                    } else {
+                        // Handle the case where user data doesn't exist in the database
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            } else {
+                push('/login_admin');
+            }
+        });
+
+        return () => unsubscribe();
+    }, [auth, push]);
+
     useEffect(
         () => {
             const getSparepart = async () => {

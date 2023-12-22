@@ -9,8 +9,32 @@ import { auth, db } from '../../lib/firebase/page';
 import PopupItemService from './popup_item_service';
 import { QuerySnapshot, addDoc, collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, updateDoc } from 'firebase/firestore';
 
-const Order = ({ selectedItems, onClose, onRemoveItem, onIncreaseQuantity, onDecreaseQuantity }: { selectedItems?: any, onClose?: any, onRemoveItem?: any, onIncreaseQuantity?: any, onDecreaseQuantity?: any }) => {
+const Order = () => {
     const ordersCollectionRef = collection(db, "orders")
+    const handleCustomerSelection = (customerName: any) => {
+        console.log('Selected Customer:', customerName);
+
+        setSelectedCustomer(customerName);
+        setShowModal(false); // Close the customer popup after selection
+
+        // Update the selected customer in each order document
+        const updatedOrders = orders.map(order => ({ ...order, customer: customerName }));
+        console.log('Updated Orders:', updatedOrders);
+
+        setOrders(updatedOrders);
+    };
+    const handleCustomerName = (customerName2: any) => {
+        console.log('Selected Customer:', customerName2);
+
+        setSelectedCustomerName(customerName2);
+        setShowModal(false); // Close the customer popup after selection
+
+        // Update the selected customer in each order document
+        const updatedOrders = orders.map(order => ({ ...order, customer: customerName2 }));
+        console.log('Updated Orders:', updatedOrders);
+
+        setOrders(updatedOrders);
+    };
 
     const [orders, setOrders] = useState<any[]>([]); // Replace 'any[]' with the appropriate type for your users
     // const orders = snapshot.val();
@@ -33,12 +57,10 @@ const Order = ({ selectedItems, onClose, onRemoveItem, onIncreaseQuantity, onDec
     const newTotalPrice = orders.reduce((acc, order) => acc + order.totalprice, 0,);
     const [showModal, setShowModal] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [selectedCustomerName, setSelectedCustomerName] = useState(null);
     let [count, setCount] = useState(0);
 
-    const handleCustomerSelection = (customerName: any) => {
-        setSelectedCustomer(customerName);
-        setShowModal(false); // Close the customer popup after selection
-    };
+
     const [orderList, setOrderList] = useState<any[]>([]);
 
     const addToOrder = (selectedSparepart: any) => {
@@ -74,6 +96,7 @@ const Order = ({ selectedItems, onClose, onRemoveItem, onIncreaseQuantity, onDec
     const handlePayment = async () => {
         try {
             alert('Processing payment...');
+
             for (const order of orders) {
                 const orderDocRef = doc(db, 'orders', order.id);
                 const orderDocSnapshot = await getDoc(orderDocRef);
@@ -81,39 +104,48 @@ const Order = ({ selectedItems, onClose, onRemoveItem, onIncreaseQuantity, onDec
                 if (orderDocSnapshot.exists()) {
                     const orderData = orderDocSnapshot.data();
 
-                    // Add the order data to the transactions collection
-                    const transactionsCollectionRef = collection(db, 'transactions');
-                    await addDoc(transactionsCollectionRef, {
-                        sparepart: orderData.sparepart,
-                        name: orderData.name,
-                        category: orderData.category,
-                        price: orderData.price,
-                        totalprice: orderData.totalprice,
-                        type: orderData.type,
-                        quantity: orderData.quantity,
-                        assets: orderData.assets,
-                        description: orderData.description,
-                        timestamp: serverTimestamp(), // Add a timestamp if needed
-                    });
-
-                    // Update the quantity in the "sparepart" collection
+                    // Check if order quantity is greater than sparepart quantity
                     const sparepartDocRef = doc(db, 'sparepart', orderData.sparepart);
                     const sparepartDocSnapshot = await getDoc(sparepartDocRef);
 
                     if (sparepartDocSnapshot.exists()) {
                         const sparepartData = sparepartDocSnapshot.data();
-                        const updatedQuantity = sparepartData.quantity - orderData.quantity;
+                        const sparepartQuantity = sparepartData.quantity;
 
-                        await updateDoc(sparepartDocRef, {
-                            quantity: updatedQuantity > 0 ? updatedQuantity : 0,
-                        });
+                        if (orderData.quantity <= sparepartQuantity) {
+                            // Add the order data to the transactions collection
+                            const transactionsCollectionRef = collection(db, 'transactions');
+                            await addDoc(transactionsCollectionRef, {
+                                sparepart: orderData.sparepart,
+                                name: orderData.name,
+                                category: orderData.category,
+                                price: orderData.price,
+                                totalprice: orderData.totalprice,
+                                type: orderData.type,
+                                quantity: orderData.quantity,
+                                assets: orderData.assets,
+                                description: orderData.description,
+                                customer: selectedCustomer, // Include the selected customer name
+                                timestamp: serverTimestamp(),
+                            });
+
+                            // Update the quantity in the "sparepart" collection
+                            const updatedQuantity = sparepartQuantity - orderData.quantity;
+                            await updateDoc(sparepartDocRef, {
+                                quantity: updatedQuantity > 0 ? updatedQuantity : 0,
+                            });
+
+                            // Delete the order document
+                            await deleteDoc(orderDocRef);
+                        } else {
+                            // Alert when order quantity exceeds sparepart quantity
+                            alert('Barang kelebihan. Tidak dapat memproses pesanan.');
+                        }
                     } else {
-                        console.error('Sparepart document not found for ID: ', orderData.sparepart);
+                        console.error('Sparepart document not found for ID:', orderData.sparepart);
                     }
-
-                    await deleteDoc(orderDocRef);
                 } else {
-                    console.error('Order document not found for ID: ', order.id);
+                    console.error('Order document not found for ID:', order.id);
                 }
             }
 
@@ -123,6 +155,8 @@ const Order = ({ selectedItems, onClose, onRemoveItem, onIncreaseQuantity, onDec
             console.error('Error processing payment:', error);
         }
     };
+
+
 
     // useEffect(() => {
     //     // Calculate
@@ -203,7 +237,7 @@ const Order = ({ selectedItems, onClose, onRemoveItem, onIncreaseQuantity, onDec
                     </div>
                     <div className='flex items-center pb-4'>
                         <p className='text-[#595959] text-md'>Name</p>
-                        <p className='text-[#000000] text-sm fixed right-[22px]'>{selectedCustomer}</p>
+                        <p className='text-[#000000] text-sm fixed right-[22px]'>{selectedCustomerName}</p>
 
 
                     </div>
@@ -215,7 +249,7 @@ const Order = ({ selectedItems, onClose, onRemoveItem, onIncreaseQuantity, onDec
 
                 </div>
                 <PopupItemService isVisible={showDetail} onClose={() => setShowItem(false)} />
-                <PopupCostumer isVisible={showModal} onClose={() => setShowModal(false)} onSelect={handleCustomerSelection} />
+                <PopupCostumer isVisible={showModal} onClose={() => setShowModal(false)} onSelect={handleCustomerSelection} onSelectId={handleCustomerName} />
 
 
             </div>

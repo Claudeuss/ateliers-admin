@@ -3,7 +3,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
-import { auth } from '../../../lib/firebase/page';
+import { auth, db } from '../../../lib/firebase/page';
+import { doc, getDoc } from 'firebase/firestore';
 
 
 const Page = () => {
@@ -12,24 +13,51 @@ const Page = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const onSubmit = (e: FormEvent) => {
-        signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-
-            push("/");
 
 
-        }
-        ).catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            alert(errorMessage);
-            console.log(errorCode)
-        });
+
+    const onSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log("onSubmit");
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+            const userDocRef = doc(db, 'account', user.uid);
+            const userDocSnapshot = await getDoc(userDocRef);
+
+            if (userDocSnapshot.exists()) {
+                const userRole = userDocSnapshot.data().role;
+
+                console.log('User Role:', userRole);
+
+                // Redirect based on user role
+                if (userRole === 'kasir') {
+                    push('/');
+                    console.log('Redirecting to /');
+                } else if (userRole === 'gudang') {
+                    push('/warehouse_admin/homepage');
+                    console.log('Redirecting to /warehouse');
+                } else {
+                    console.log('Unhandled role:', userRole);
+                    // Handle other roles or no role as needed
+                }
+            } else {
+                console.log('User data does not exist in the database');
+            }
+        } catch (error) {
+            const errorCode = error;
+            const errorMessage = error;
+            alert(errorMessage);
+            console.error(errorCode);
+        }
+
+        console.log('onSubmit');
         console.log(email);
         console.log(password);
     };
+
     return (
         <div>
             <>

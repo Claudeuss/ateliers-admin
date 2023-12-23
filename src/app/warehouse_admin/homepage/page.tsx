@@ -1,15 +1,50 @@
 'use client';
 import SidebarGudang from '@/components/sidebar_gudang';
 import Stockitem from '@/components/stockitem';
-import { QuerySnapshot, collection, getDocs } from 'firebase/firestore';
+import { QuerySnapshot, collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { BsBoxSeam, BsBoxes } from "react-icons/bs";
 import { SlSocialDropbox } from "react-icons/sl";
-import { db } from '../../../../lib/firebase/page';
+import { auth, db } from '../../../../lib/firebase/page';
+import { useRouter } from 'next/navigation';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const WarehouseDashboard = () => {
     const [spareparts, setSparepart] = useState<any[]>([]);
     const itemCollectionRef = collection(db, 'sparepart');
+    const { push } = useRouter();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                try {
+                    // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+                    const userDocRef = doc(db, 'account', currentUser.uid);
+                    const userDocSnapshot = await getDoc(userDocRef);
+
+                    if (userDocSnapshot.exists()) {
+                        const userRole = userDocSnapshot.data().role;
+
+                        if (userRole === 'gudang') {
+                            push('/warehouse_admin/homepage');
+                        } else if (userRole === 'kasir') {
+                            push('/');
+                        } else {
+                            // Handle other roles or no role as needed
+                        }
+                    } else {
+                        // Handle the case where user data doesn't exist in the database
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            } else {
+                push('/login_admin');
+            }
+        });
+
+        return () => unsubscribe();
+    }, [auth, push]);
 
     useEffect(() => {
         const getSpareparts = async () => {

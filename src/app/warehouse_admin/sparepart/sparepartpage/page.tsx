@@ -41,7 +41,7 @@ const sparepartpage = () => {
                         const userRole = userDocSnapshot.data().role;
 
                         if (userRole === 'gudang') {
-                            push('/warehouse_admin/sparepart/sparepartpage');
+
                         } else if (userRole === 'kasir') {
                             push('/');
                         } else {

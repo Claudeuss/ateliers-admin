@@ -18,16 +18,19 @@ const AddPage = () => {
             setCount(count);
         }
     }
-    const [newName, setNewName] = useState('')
-    const [newType, setNewType] = useState('')
-    const [newCategory, setNewCategory] = useState('')
-    const [newPrice, setNewPRice] = useState('')
-    const [newDesc, setNewDesc] = useState('');
+
+    const [newName, setNewName] = useState<string>('');
+    const [newType, setNewType] = useState<string>('');
+    const [newCategory, setNewCategory] = useState<string>('');
+    const [newPrice, setNewPrice] = useState<string>('');
+    const [newDesc, setNewDesc] = useState<string>('');
     const [downloadURL, setDownloadURL] = useState<string[]>([]);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState<boolean>(false);
+
     const [img, setImg] = useState('')
     const usersCollectionRef = collection(db, "sparepart")
 
+    // Function to handle file upload
     const handleSelectedFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
 
@@ -36,7 +39,7 @@ const AddPage = () => {
 
             const uploadTasks = Array.from(files).map((file) => {
                 return new Promise<string>(async (resolve, reject) => {
-                    const storageRef = ref(storage, `sparepart_images/${file.name}`);
+                    const storageRef = ref(storage, `files/${file.name}`);
                     const uploadTask = uploadBytesResumable(storageRef, file);
 
                     uploadTask.on(
@@ -46,25 +49,39 @@ const AddPage = () => {
                         },
                         (error) => {
                             // Handle error
+                            console.error('Upload error:', error);
                             reject(error.message);
                         },
                         () => {
-                            // Upload completed successfully, get download URL
-                            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                                resolve(url);
-                            });
+                            // Upload completed successfully, don't resolve here
                         }
                     );
+
+                    // No need to resolve here; resolve after the upload is completed
+                    uploadTask.then(() => {
+                        const url = getDownloadURL(storageRef);
+                        url.then((downloadURL) => {
+                            console.log('Download URL:', downloadURL);
+                            resolve(downloadURL);
+                        }).catch((urlError) => {
+                            console.error('Error getting download URL:', urlError);
+                            reject(urlError);
+                        });
+                    });
                 });
             });
 
             try {
-                const downloadURLs = await Promise.all(uploadTasks);
-                console.log(downloadURLs); // Array of download URLs
+                // Wait for all files to be uploaded
+                const downloadURLs = await Promise.all<string>(uploadTasks);
 
-                setDownloadURL((prevDownloadURLs) => [...prevDownloadURLs, ...downloadURLs]);
+                // Set the download URLs in state or use them as needed
+                setDownloadURL(downloadURLs);
+
+                // Perform additional actions if needed, for example, update state or send to backend
             } catch (error) {
-                alert(error);
+                console.error('Error uploading files:', error);
+                alert('Error uploading files: ' + error);
             } finally {
                 setLoading(false);
             }
@@ -73,12 +90,13 @@ const AddPage = () => {
         }
     };
 
+    // Function to send data to the database
     const AddData = async () => {
         alert('Adding data...');
         try {
             // Add the document to the collection
             await addDoc(usersCollectionRef, {
-                name: newName, // Corrected: Assign newName to the 'name' field
+                name: newName,
                 type: newType,
                 price: newPrice,
                 description: newDesc,
@@ -93,7 +111,7 @@ const AddPage = () => {
             setNewName('');
             setNewType('');
             setNewCategory('');
-            setNewPRice('');
+            setNewPrice('');
             setNewDesc('');
             setDownloadURL([]);
             setCount(0);
@@ -112,7 +130,7 @@ const AddPage = () => {
                     <div className=' w-full h-full bg-white rounded-md py-2'>
                         <div className='flex gap-5 px-4 pb-2'>
                             <a href="/warehouse_admin/sparepart/sparepartpage">
-                                <p className=' text-lg font-medium text-black py-1 px-2 rounded-md'>
+                                <p className=' text-lg font-medium text-black py-1 px-2 rounded-md hover:text-[#1b24ff] hover:bg-[#EAEAEA]'>
                                     Spareparts Data
                                 </p>
                             </a>
@@ -122,6 +140,8 @@ const AddPage = () => {
                             <div className=' flex justify-between py-2'>
                                 <p className='text-xl font-semibold'>Name</p>
                                 <input
+                                    id='name'
+                                    name='name-product'
                                     required
                                     onChange={(event) => setNewName(event.target.value)}
                                     placeholder='Product Name'
@@ -131,6 +151,8 @@ const AddPage = () => {
                             <div className=' flex justify-between py-2'>
                                 <p className='text-xl font-semibold'>Type</p>
                                 <input
+                                    id='type'
+                                    name='type-product'
                                     required
                                     onChange={(event) => setNewType(event.target.value)}
                                     placeholder='Product Type'
@@ -181,8 +203,10 @@ const AddPage = () => {
                             <div className=' flex justify-between py-2'>
                                 <p className='text-xl font-semibold'>Price</p>
                                 <input
+
+                                    name='price'
                                     required
-                                    onChange={(event) => setNewPRice(event.target.value)}
+                                    onChange={(event) => setNewPrice(event.target.value)}
                                     placeholder='Product Price'
                                     type="text"
                                     className=' w-3/4 bg-white rounded-md border border-slate-400 outline-blue-700 px-2' />
@@ -197,6 +221,7 @@ const AddPage = () => {
                                             </div>
                                         </div>
                                         <input
+                                            name='count'
                                             className=' w-20 text-center '
                                             type="text"
                                             value={count}
@@ -221,8 +246,7 @@ const AddPage = () => {
                                     className=' w-3/4 h-28 bg-white rounded-md border border-slate-400 outline-blue-700 px-2'
                                 /> */}
                                 <textarea
-                                    name=""
-                                    id=""
+                                    id="desc"
                                     onChange={(event) => setNewDesc(event.target.value)}
                                     className=' min-h-[100px] w-3/4 bg-white rounded-md border border-slate-400 outline-blue-700 px-2 py-1'
                                     placeholder='Add Description'
@@ -233,9 +257,13 @@ const AddPage = () => {
                                 <input
                                     required
                                     onChange={handleSelectedFile}
-                                    multiple
+                                    multiple  // Tambahkan atribut ini untuk memungkinkan pemilihan beberapa file
                                     type="file"
-                                    className='block w-3/4 border rounded-lg border-slate-400 file:bg-[#1b24ff] file:py-1 file:px-4 file:rounded-md  file:border-0 file:text-white font-medium file:font-semibold file:hover:bg-[#1b23ffe1] hover:bg-slate-100' id='multiple_files' />
+                                    className='block w-3/4 border rounded-lg border-slate-400 file:bg-[#1b24ff] file:py-1 file:px-4 file:rounded-md  file:border-0 file:text-white font-medium file:font-semibold file:hover:bg-[#1b23ffe1] hover:bg-slate-100'
+                                    id='multiple_files'
+                                    name='image'
+                                />
+
                             </div>
                             <div className='flex justify-end w-full py-4'>
                                 <button

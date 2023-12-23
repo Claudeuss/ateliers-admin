@@ -13,12 +13,11 @@ const EditSparepartForm = ({ }: {}) => {
     const [name, setName] = useState('');
     const [type, setType] = useState('')
     const [price, setPrice] = useState('');
-    const [quantity, setQuantity] = useState(0);
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [desc, setDesc] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
-    const [selectedCategory, setSelectedCategory] = useState('');
     const router = useRouter();
 
     // variabel Quantity
@@ -58,6 +57,7 @@ const EditSparepartForm = ({ }: {}) => {
         fetchData(id);
     }, []);
 
+    // Update Query to database
     const handleUpdate = async (idd: any) => {
         const docRef = doc(db, 'sparepart', idd);
 

@@ -1,10 +1,28 @@
+'use client';
 import Sidebar from '@/components/sidebar'
 import SidebarGudang from '@/components/sidebar_gudang'
-import React from 'react'
+import { collection, getDocs, QuerySnapshot } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
 import { BiEdit } from 'react-icons/bi'
 import { BsSearch, BsTrash3 } from 'react-icons/bs'
+import { db } from '../../../../lib/firebase/page'
 
 const transactionpage = () => {
+    const [cart, setCart] = useState<any[]>([]);
+    const itemCollectionRef = collection(db, 'transactions');
+
+    useEffect(() => {
+        const getCart = async () => {
+            try {
+                const data: QuerySnapshot = await getDocs(itemCollectionRef);
+                setCart(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            } catch (error) {
+                console.error('Error fetching spareparts:', error);
+            }
+        };
+
+        getCart();
+    }, []);
     return (
         <>
             <SidebarGudang />
@@ -29,24 +47,28 @@ const transactionpage = () => {
                                 </tr>
                             </thead>
                             <tbody className=' '>
-                                <tr className=' border-b'>
-                                    <td className='text-center border-r'>1</td>
-                                    <td className=' text-center border-r px-2'>10-12-2023</td>
-                                    <td className=' text-center border-r px-2'>Velg Rcb nih bous</td>
-                                    <td className=' text-center border-r'>12</td>
-                                    <td className='px-2 py-2'>
-                                        <div className='flex'>
-                                            <div className='w-full h-full hover:bg-[#1b24ff] hover:text-white py-1 rounded-md'>
-                                                <BiEdit className='mx-auto text-xl' />
-                                            </div>
+                                {cart.map((item, index) => (
+                                    <tr className=' border-b' key={item.id}>
+                                        <td className='text-center border-r'>{index + 1}</td>
+                                        <td className=' text-center border-r px-2'>
+                                            {new Date(item.timestamp.seconds * 1000).toLocaleString('en-GB', {
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                            })}
+                                        </td>
+                                        <td className=' text-center border-r px-2'>{item.name}</td>
+                                        <td className=' text-center border-r'>{item.quantity}</td>
+                                        <td className='px-2 py-2'>
                                             <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md'>
                                                 <BsTrash3 className='mx-auto text-xl ' />
                                             </div>
-                                        </div>
-
-                                    </td>
-                                </tr>
-
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>

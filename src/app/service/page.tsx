@@ -6,23 +6,49 @@ import Sidebar from '@/components/sidebar';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import React, { Fragment, useEffect, useState } from 'react';
-import { auth } from '../../../lib/firebase/page';
+import { auth, db } from '../../../lib/firebase/page';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Service = () => {
     const { push } = useRouter();
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            if (!currentUser) {
 
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                try {
+                    // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+                    const userDocRef = doc(db, 'account', currentUser.uid);
+                    const userDocSnapshot = await getDoc(userDocRef);
+
+                    if (userDocSnapshot.exists()) {
+                        const userRole = userDocSnapshot.data().role;
+
+                        if (userRole === 'kasir') {
+                            push('/service');
+                        } else if (userRole === 'gudang') {
+                            push('/warehouse_admin/homepage');
+                        } else {
+                            // Handle other roles or no role as needed
+                        }
+                    } else {
+                        // Handle the case where user data doesn't exist in the database
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            } else {
                 push('/login_admin');
             }
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [auth, push]);
+
+
+
     const [showDetail, setShowItem] = useState(false);
-    // const [showModal, setShowModal] = useState(false);
     return (
         <div>
 
@@ -32,32 +58,15 @@ const Service = () => {
                 <div className='pl-28 pr-[360px]'>
                     <div className='px-5 py-3'>
                         <div>
-                            <h1 className='text-2xl font-semibold'>List Sparepart</h1>
-                            <div className='pt-3 grid grid-cols-3
-                           
-                           
-                           
-                           gap-3 '>
-                                <div className="bg-white hover:bg-[#1B24FF] py-1 pb-2  group cursor-pointer hover:shadow-lg shadow-md">
+                            <div className='flex justify-between'>
+                                <h1 className='text-2xl font-semibold pb-4'>List Sparepart</h1>
+                                <button className="tracking-wider bg-black text-[#ffffff] py-1   hover:bg-[#1a1a1a] hover:text-white text-center rounded-md transition-all duration-500 w-[300px] mb-2" onClick={() => setShowItem(true)}>
+                                    Service
 
-                                    <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Accesories
-                                    </h3>
-                                </div>
-                                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg  shadow-md">
-
-                                    <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Wheels
-                                    </h3>
-                                </div>
-                                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ">
-
-                                    <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Engine
-                                    </h3>
-                                </div>
-
-
-
-
+                                </button>
                             </div>
+
+
                             <ItemService />
 
                         </div>

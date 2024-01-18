@@ -9,28 +9,50 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { Fragment, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
-import { auth } from '../../lib/firebase/page';
+import { auth, db } from '../../lib/firebase/page';
 import SidebarGudang from '@/components/sidebar_gudang';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function Home() {
   const { push } = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (!currentUser) {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+          const userDocRef = doc(db, 'account', currentUser.uid);
+          const userDocSnapshot = await getDoc(userDocRef);
 
+          if (userDocSnapshot.exists()) {
+            const userRole = userDocSnapshot.data().role;
+
+            if (userRole === 'kasir') {
+              push('/');
+            } else if (userRole === 'gudang') {
+              push('/warehouse_admin/homepage');
+            } else {
+              // Handle other roles or no role as needed
+            }
+          } else {
+            // Handle the case where user data doesn't exist in the database
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      } else {
         push('/login_admin');
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [auth, push]);
 
   return (
     <Fragment>
       <Sidebar />
 
-      <div className='bg-[#EAEAEA] h-screen w-screen'>
+      <div className='bg-[#EAEAEA] h-screen w-full'>
         <div className='pl-28 pr-[360px]'>
           <div className='px-5 py-3'>
             <div>

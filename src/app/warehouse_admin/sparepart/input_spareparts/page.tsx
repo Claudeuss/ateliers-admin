@@ -1,12 +1,49 @@
 "use client";
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import React, { useState } from 'react'
-import { db, storage } from '../../../../../lib/firebase/page';
-import { addDoc, collection } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react'
+import { auth, db, storage } from '../../../../../lib/firebase/page';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import SidebarGudang from '@/components/sidebar_gudang';
 import { BiMinus, BiPlus } from 'react-icons/bi';
+import { useRouter } from 'next/navigation';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const AddPage = () => {
+
+    const { push } = useRouter();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                try {
+                    // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+                    const userDocRef = doc(db, 'account', currentUser.uid);
+                    const userDocSnapshot = await getDoc(userDocRef);
+
+                    if (userDocSnapshot.exists()) {
+                        const userRole = userDocSnapshot.data().role;
+
+                        if (userRole === 'gudang') {
+                            push('/warehouse_admin/sparepart/input_spareparts');
+                        } else if (userRole === 'kasir') {
+                            push('/');
+                        } else {
+                            // Handle other roles or no role as needed
+                        }
+                    } else {
+                        // Handle the case where user data doesn't exist in the database
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            } else {
+                push('/login_admin');
+            }
+        });
+
+        return () => unsubscribe();
+    }, [auth, push]);
+
     let [count, setCount] = useState(0);
     function incrementCount() {
         count = count + 1;

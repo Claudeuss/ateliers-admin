@@ -1,9 +1,30 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PopupForm from './popup_form';
+import { QuerySnapshot, collection, getDocs } from 'firebase/firestore';
+import { db } from '../../lib/firebase/page';
 
-const PopupCostumer = ({ isVisible, onClose }: { isVisible?: any, onClose?: any }) => {
+const PopupCostumer = ({ isVisible, onClose, onSelect, onSelectId }: { isVisible?: any, onClose?: any, onSelect?: any, onSelectId?: any }) => {
     const [showModul, setShowModul] = useState(false);
+
+    const usersCollectionRef = collection(db, "users")
+    const [users, setUsers] = useState<any[]>([]); // Replace 'any[]' with the appropriate type for your users
+
+    useEffect(() => {
+        const getUsers = async () => {
+            try {
+                const data: QuerySnapshot = await getDocs(usersCollectionRef);
+
+                // Update the component's state with the fetched data
+                setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        // Call the getUsers function when the component mounts (empty dependency array)
+        getUsers();
+    }, []);
     if (!isVisible) return null;
     return (
         <div className='z-20 fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center'>
@@ -49,117 +70,33 @@ const PopupCostumer = ({ isVisible, onClose }: { isVisible?: any, onClose?: any 
                                 </tr>
                             </thead>
                             <tbody className='overflow-y-auto overflow-x-hidden h-[238px]'>
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
+                                {users.map((user, index) => (
+                                    <tr>
+                                        <td><p className='text-center'>{index + 1}</p></td>
+                                        <td><p className='text-center'>{user.name}</p></td>
+                                        <td><p className='text-center'>{user.adress}</p></td>
+                                        <td><p className='text-center'>{user.came}</p></td>
+                                        <td><p className='text-center'>{user.category}</p></td>
 
-                                    </button></td>
-                                </tr>
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
 
-                                    </button></td>
-                                </tr>
+                                        <td>
+                                            <button className="py-1 bg-[#1b23ff] text-[#ffffff] text-xs hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full "
+                                                onClick={() => {
+                                                    onSelect(user.id);
+                                                    onSelectId(user.name);
+                                                    // Pass the selected customer's ID to the parent component
+                                                    onClose(); // Close the customer modal
+                                                }}
+                                            >
+                                                Add+
+                                            </button>
+                                        </td>
 
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
 
-                                    </button></td>
-                                </tr>
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
 
-                                    </button></td>
-                                </tr>
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
+                                    </tr>
+                                ))}
 
-                                    </button></td>
-                                </tr>
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
-
-                                    </button></td>
-                                </tr>
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
-
-                                    </button></td>
-                                </tr>
-
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
-
-                                    </button></td>
-                                </tr>  <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
-
-                                    </button></td>
-                                </tr>
-                                <tr>
-                                    <td><p className='text-center'>1</p></td>
-                                    <td><p className='text-center'>Udin Melduaks</p></td>
-                                    <td><p className='text-center'>Parongpong</p></td>
-                                    <td><p className='text-center'>10x</p></td>
-                                    <td><p className='text-center'>Wheels</p></td>
-                                    <td> <button className="my-2 tracking-wider bg-[#1b23ff] text-[#ffffff]  text-xs  hover:bg-[#1b50ff] hover:text-white text-center rounded-md transition-all duration-500 w-full py-1" >
-                                        Add+
-
-                                    </button></td>
-                                </tr>
                             </tbody>
                         </table>
 

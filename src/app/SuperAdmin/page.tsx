@@ -1,3 +1,4 @@
+'use client'
 import ChartCard from '@/components/ChartCard'
 import SidebarGudang from '@/components/sidebar_gudang'
 import React from 'react'

@@ -1,6 +1,6 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import React from 'react'
+import { Doughnut } from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -35,20 +35,18 @@ const options = {
   responsive: true,
   maintainAspectRatio: false, // Set to false to allow custom height
   height: 200, // Set the desired height in pixels
-  plugins: {
-    legend: {
-      position: 'bottom',
-    },
+  legend: {
+    position: 'bottom',
   },
-  rotation: 0, // Set rotation to 0 to position labels at the bottom
+  rotation: 0 // Rotate the labels
 };
 
 const ChartCard = () => {
   return (
     <div className='w-48 h-48'>
-      <Doughnut data={data} options={options} />
+      <Doughnut data={data} options={options}/>
     </div>
-  );
-};
+  )
+}
 
 export default ChartCard;

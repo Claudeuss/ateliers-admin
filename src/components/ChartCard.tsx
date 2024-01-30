@@ -28,19 +28,21 @@ const DoughnutChartComponent: React.FC = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    width: 200,
+    height: 200,
     plugins: {}
   };
 
   return (
     
-      <div className="w-96 h-72 max-w-lg mx-auto mt-8 bg-white p-4 rounded-lg shadow-md">
+      <div className=' h-[400px] w-[400px] flex'>
+        <div className="w-96 h-96 max-w-lg mx-auto mt-8 bg-white p-4 rounded-lg shadow-md ">
         <h2 className="text-lg font-semibold mb-4">Doughnut Chart</h2>
         <Doughnut 
           data={data} 
-          width={200}
-          height={200}
           options={options} 
         />
+      </div>
       </div>
     
   );

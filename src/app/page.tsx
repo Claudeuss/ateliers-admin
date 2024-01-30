@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { auth, db } from '../../lib/firebase/page';
 import SidebarGudang from '@/components/sidebar_gudang';
 import { doc, getDoc } from 'firebase/firestore';
+import SidebarSuper from '@/components/sidebar_super';
 
 export default function Home() {
   const { push } = useRouter();
@@ -50,7 +51,7 @@ export default function Home() {
 
   return (
     <Fragment>
-      <Sidebar />
+      <SidebarSuper />
 
       <div className='bg-[#EAEAEA] h-screen w-full'>
         <div className='pl-28 pr-[360px]'>

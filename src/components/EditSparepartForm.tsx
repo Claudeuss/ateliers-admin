@@ -123,7 +123,7 @@ const EditSparepartForm = ({ }: {}) => {
 
 
     return (
-        <div className='w-full pl-28 bg-[#EAEAEA] overflow-hidden'>
+        <div className='w-full min-h-screen pl-28 bg-[#EAEAEA] overflow-hidden'>
             <div className=' p-5 '>
                 <h2 className='text-2xl font-semibold '>Edit Sparepart</h2>
                 <form

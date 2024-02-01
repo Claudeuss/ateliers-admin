@@ -1,38 +1,38 @@
-// DoughnutChartComponent.tsx
-
-import { Chart as ChartJS, ArcElement, Legend, Tooltip } from 'chart.js';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+interface DoughnutChartProps {
+  data: number[];
+  labels: string[];
+}
 
-const DoughnutChartComponent: React.FC = () => {
-  // Data for the doughnut chart
-  const data = {
-    labels: ['Red', 'Blue'],
+const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, labels }) => {
+  const chartData = {
+    labels: labels,
     datasets: [
       {
-        data: [20, 20],
-        backgroundColor: ['#9498FF', '#1B24FF'],
+        data: data,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(255, 206, 86, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
+          'rgba(153, 102, 255, 0.7)',
+        ],
       },
     ],
   };
 
-  // Configuration options for the doughnut chart
-  const options = {
+  const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {},
   };
 
   return (
-    <div className='h-[400px] w-[400px] flex'>
-      <div className="w-96 h-96 max-w-lg mx-auto mt-8 bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-lg font-semibold mb-4">Doughnut Chart</h2>
-        <Doughnut data={data} options={options} />
-      </div>
+    <div>
+      <Doughnut data={chartData} options={chartOptions} />
     </div>
   );
 };
 
-export default DoughnutChartComponent;
+export default DoughnutChart;

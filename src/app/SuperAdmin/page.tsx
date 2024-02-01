@@ -1,11 +1,12 @@
 'use client'
 import ChartCard from '@/components/ChartCard'
-import SidebarGudang from '@/components/sidebar_gudang'
 import SidebarSuper from '@/components/sidebar_super'
 import React from 'react'
 
 
 const page: React.FC = () => {
+  const data = [30, 20, 25, 15, 10];
+  const labels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'];
   return (
     <>
     <SidebarSuper/>
@@ -14,8 +15,8 @@ const page: React.FC = () => {
           <p className='text-2xl font-semibold'>
             Admin
           </p>
-          <div>
-            <ChartCard/>
+          <div className='p-5 flex'>
+            <ChartCard data={data} labels={labels}/>
           </div>
         </div>
     </div>

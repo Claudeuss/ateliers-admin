@@ -1,5 +1,6 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import 'chart.js/auto'; // Add this line
 
 interface DoughnutChartProps {
   data: number[];
@@ -15,9 +16,6 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, labels }) => {
         backgroundColor: [
           'rgba(255, 99, 132, 0.7)',
           'rgba(54, 162, 235, 0.7)',
-          'rgba(255, 206, 86, 0.7)',
-          'rgba(75, 192, 192, 0.7)',
-          'rgba(153, 102, 255, 0.7)',
         ],
       },
     ],
@@ -29,7 +27,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, labels }) => {
   };
 
   return (
-    <div>
+    <div className=' max-h-[300px] max-w-[400px] bg-white rounded-md p-2 '>
       <Doughnut data={chartData} options={chartOptions} />
     </div>
   );

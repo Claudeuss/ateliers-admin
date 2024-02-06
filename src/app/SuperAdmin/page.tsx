@@ -53,8 +53,8 @@ const page: React.FC = () => {
           <p className='text-2xl font-semibold'>
             Home
           </p>
-          <div>
-            <div className='p-5 flex gap-4'>
+          <div className='p-5 gap-y-4'>
+            <div className='flex gap-4'>
               <ChartCard data={data} labels={labels} />
               <div className=' overflow-y-scroll h-[300px] w-full'>
                 <table className='table w-full overflow-y-auto bg-white rounded-md h-[270px]'>
@@ -64,7 +64,7 @@ const page: React.FC = () => {
                       <th className='w-1/3 py-2'>Date</th>
                       <th className='w-1/3 py-2'>Product Name</th>
                       <th className='w-44 py-2'>Quantity</th>
-                      <th className='w-52 py-2'>Edit</th>
+                      <th className='w-52 py-2'>Customer</th>
                     </tr>
                   </thead>
                   <tbody className='overflow-auto flex-grow'>
@@ -82,8 +82,8 @@ const page: React.FC = () => {
                         <td className=' text-center border-r px-2'>{item.name}</td>
                         <td className=' text-center border-r'>{item.quantity}</td>
                         <td className='px-2 py-2'>
-                          <div className='w-full h-full hover:bg-blue-700 hover:text-white py-1 rounded-md'>
-                            <BiEdit className=' mx-auto' />
+                          <div className='w-full h-full text-center'>
+                            {item.category}
                           </div>
                         </td>
                       </tr>
@@ -94,17 +94,17 @@ const page: React.FC = () => {
             </div>
 
             {/* table sparepart */}
-            <div className=' w-full h-[400px] py-2 bg-white rounded-md'>
+            <div className=' w-full h-[400px] py-2 bg-white rounded-md mt-4'>
               <div className=' mt-2 h-[340px] overflow-y-scroll'>
                 <table className=' table border-t-2 border-black  w-full'>
                   <thead className=' border-b'>
                     <tr>
-                      <th className=' w-10 border-r'>Id</th>
-                      <th className=' w-64 border-r'>Name</th>
-                      <th className=' w-64 border-r'>Price</th>
-                      <th className=' w-56 border-r'>Category</th>
-                      <th className=' w-56 border-r'>Quantity</th>
-                      <th className=' '>Action</th>
+                      <th className=' min-w-10 xl:w-10 border-r'>Id</th>
+                      <th className=' w-64 xl:min-w-96 border-r'>Name</th>
+                      <th className=' w-64 xl:min-w-96 border-r'>Price</th>
+                      <th className=' w-56 xl:min-w-96 border-r'>Category</th>
+                      <th className=' w-56 xl:min-w-72 border-r'>Quantity</th>
+                      <th className=' w-auto'>Type</th>
                     </tr>
                   </thead>
                   <tbody className=''>
@@ -115,13 +115,8 @@ const page: React.FC = () => {
                         <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
                         <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
                         <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
-                        <td className=' h-auto px-2 py-2 flex m-auto'>
-                          <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'>
-                            <BiEdit className='mx-auto text-xl ' />
-                          </div>
-                          <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto  '>
-                            <BsTrash3 className='mx-auto text-xl ' />
-                          </div>
+                        <td className=' h-auto py-1 text-center'>
+                         {item.type}
                         </td>
                       </tr>
                     ))}

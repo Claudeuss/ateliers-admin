@@ -63,8 +63,8 @@ const page: React.FC = () => {
                       <th className='w-10 py-2'>Id</th>
                       <th className='w-1/3 py-2'>Date</th>
                       <th className='w-1/3 py-2'>Product Name</th>
-                      <th className='w-44 py-2'>Quantity</th>
-                      <th className='w-52 py-2'>Customer</th>
+                      <th className='xl:w-44 py-2'>Quantity</th>
+                      <th className='xl:w-52 py-2'>Customer</th>
                     </tr>
                   </thead>
                   <tbody className='overflow-auto flex-grow'>
@@ -100,11 +100,11 @@ const page: React.FC = () => {
                   <thead className=' border-b'>
                     <tr>
                       <th className=' min-w-10 xl:w-10 border-r'>Id</th>
-                      <th className=' w-64 xl:min-w-96 border-r'>Name</th>
-                      <th className=' w-64 xl:min-w-96 border-r'>Price</th>
-                      <th className=' w-56 xl:min-w-96 border-r'>Category</th>
-                      <th className=' w-56 xl:min-w-72 border-r'>Quantity</th>
-                      <th className=' w-auto'>Type</th>
+                      <th className=' w-1/3 xl:w-96 border-r'>Name</th>
+                      <th className=' w-1/3 xl:w-96 border-r'>Price</th>
+                      <th className=' w-1/4 xl:w-96 border-r'>Category</th>
+                      <th className=' w-1/4 xl:w-72 border-r'>Quantity</th>
+                      <th className=' w-40'>Type</th>
                     </tr>
                   </thead>
                   <tbody className=''>
@@ -116,7 +116,7 @@ const page: React.FC = () => {
                         <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
                         <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
                         <td className=' h-auto py-1 text-center'>
-                         {item.type}
+                          {item.type}
                         </td>
                       </tr>
                     ))}

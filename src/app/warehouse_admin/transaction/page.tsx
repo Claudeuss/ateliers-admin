@@ -35,7 +35,7 @@ const transactionpage = () => {
                             <input placeholder='Search Here' type="search" name="" id="" className=' w-full border-none outline-none text-base' />
                         </div>
                     </div>
-                    <div className=' w-full h-[500px] bg-white my-4 rounded-md shadow-md border border-slate-200 shadow-slate-500 '>
+                    <div className=' w-full h-[500px] xl:h-[850px] bg-white my-2 rounded-md shadow-md border border-slate-200 shadow-slate-500 overflow-auto '>
                         <table className='table w-full'>
                             <thead>
                                 <tr className=' border-b border-slate-500'>
@@ -50,14 +50,12 @@ const transactionpage = () => {
                                 {cart.map((item, index) => (
                                     <tr className=' border-b' key={item.id}>
                                         <td className='text-center border-r'>{index + 1}</td>
-                                        <td className=' text-center border-r px-2'>
+                                        <td className='xl:w-40 text-center border-r px-2'>
                                             {new Date(item.timestamp.seconds * 1000).toLocaleString('en-GB', {
-                                                weekday: 'long',
+                                                weekday: 'short',
                                                 year: 'numeric',
-                                                month: 'long',
+                                                month: 'numeric',
                                                 day: 'numeric',
-                                                hour: 'numeric',
-                                                minute: 'numeric',
                                             })}
                                         </td>
                                         <td className=' text-center border-r px-2'>{item.name}</td>

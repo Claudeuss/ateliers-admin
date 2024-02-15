@@ -57,6 +57,7 @@ const AddPage = () => {
     }
 
     const [newName, setNewName] = useState<string>('');
+    const [status] = useState<string>('invalid');
     const [newType, setNewType] = useState<string>('');
     const [newCategory, setNewCategory] = useState<string>('');
     const [newPrice, setNewPrice] = useState<string>('');
@@ -136,6 +137,7 @@ const AddPage = () => {
                 name: newName,
                 type: newType,
                 price: newPrice,
+                newStatus: status,
                 description: newDesc,
                 assets: downloadURL,
                 quantity: count,

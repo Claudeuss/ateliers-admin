@@ -57,6 +57,7 @@ const page: React.FC = () => {
             <div className='flex gap-4'>
               <ChartCard data={data} labels={labels} />
               <div className=' overflow-y-scroll h-[300px] w-full'>
+                <p className='text-xl font-semibold'>Transaction</p>
                 <table className='table w-full overflow-y-auto bg-white rounded-md h-[270px]'>
                   <thead>
                     <tr className=' border-b border-slate-500'>
@@ -95,6 +96,7 @@ const page: React.FC = () => {
 
             {/* table sparepart */}
             <div className=' w-full h-[400px] py-2 bg-white rounded-md mt-4'>
+              <p className='text-xl font-semibold px-4'>Sparepart</p>
               <div className=' mt-2 h-[340px] overflow-y-scroll'>
                 <table className=' table border-t-2 border-black  w-full'>
                   <thead className=' border-b'>

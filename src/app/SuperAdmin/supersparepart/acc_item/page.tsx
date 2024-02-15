@@ -6,10 +6,11 @@ import React, { useEffect, useState } from 'react';
 import { BiEdit, BiSearch } from 'react-icons/bi';
 import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs';
 import { SlSocialDropbox } from 'react-icons/sl';
-import { auth, db } from '../../../../../lib/firebase/page';
+
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
-import EditSparepartForm from '@/components/EditSparepartForm';
+import SidebarSuper from '@/components/sidebar_super';
+import { auth, db } from '../../../../../lib/firebase/page';
 
 interface Sparepart {
     id: string;
@@ -30,37 +31,6 @@ const sparepartpage = () => {
 
     const { push } = useRouter();
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            if (currentUser) {
-                try {
-                    // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
-                    const userDocRef = doc(db, 'account', currentUser.uid);
-                    const userDocSnapshot = await getDoc(userDocRef);
-
-                    if (userDocSnapshot.exists()) {
-                        const userRole = userDocSnapshot.data().role;
-
-                        if (userRole === 'gudang') {
-                            push('/warehouse_admin/sparepart/sparepartpage');
-                        } else if (userRole === 'kasir') {
-                            push('/');
-                        } else {
-                            // Handle other roles or no role as needed
-                        }
-                    } else {
-                        // Handle the case where user data doesn't exist in the database
-                    }
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
-                }
-            } else {
-                push('/login_admin');
-            }
-        });
-
-        return () => unsubscribe();
-    }, [auth, push]);
 
     useEffect(
         () => {
@@ -119,7 +89,7 @@ const sparepartpage = () => {
 
 
     const handleUpdateClick = async (id: any) => {
-        router.push(`/warehouse_admin/sparepart/edit?id=${id}`);
+        router.push(`/SuperAdmin/supersparepart/edit_item?id=${id}`);
 
         const docRef = doc(db, "sparepart", id);
         const docSnap = await getDoc(docRef);
@@ -129,41 +99,23 @@ const sparepartpage = () => {
         setNewName(data[0].newName);
         setNewType(data[0].newType);
     };
-    const handlePopup = async (id: any) => {
-        // Set the service ID in the URL
-        router.push(`/warehouse_admin/sparepart/sparepartpage?id=${id}`);
-        // Show the update modal
-        // const docRef = doc(db, "service", idd);
-        // const docSnap = await getDoc(docRef);
-        // let data: any[] = [];
-        // data.push(docSnap.data());
-        // setNewServiceid(data[0].serviceid)
-        // setNewMototype(data[0].mototype)
-        // setNewOwner(data[0].owner)
-        // setNewAddress(data[0].address)
-        // setNewStatus(data[0].status)
-        setShowItem(true);
-    };
 
-    const [showDetail, setShowItem] = useState(false);
+
     return (
         <>
-            <SidebarGudang />
-            <div className=' w-full pl-28 bg-[#EAEAEA] overflow-hidden'>
+            <SidebarSuper />
+            <div className='h-screen w-full pl-28 bg-[#EAEAEA] overflow-hidden'>
                 <div className=' p-5'>
-                    <h1 className='mx-3 text-2xl font-semibold'>Sparepart</h1>
+                    <h1 className='mx-3 text-2xl font-semibold'>Validator Page</h1>
                     <div className='px-3 py-3'>
-                        <div className=' grid grid-cols-3 gap-4 pb-4'>
-                            <Stockitem icon={<BsBoxes className=" text-white m-auto text-4xl" />} title={'Total Stock'} total={spareparts.filter((item) => item.quantity >= 1).length} />
-                            <Stockitem icon={<BsBoxSeam className=" text-white m-auto text-4xl" />} title={'Low Stock'} total={spareparts.filter((item) => item.quantity < 10 && item.quantity >= 1).length} />
-                            <Stockitem icon={<SlSocialDropbox className=" text-white m-auto text-4xl" />} title={'Empty Stock'} total={spareparts.filter((item) => item.quantity === 0).length} />
-                        </div>
-                        <div className=' w-full h-[400px] py-2 bg-white rounded-md'>
+
+                        <div className='w-full h-[400px] py-2 bg-white rounded-md'>
                             <div className=' flex px-5 justify-between'>
                                 <div className='flex gap-5 justify-between'>
-                                    <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Sparepart Data</p>
+                                    <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Sparepart Data</p>
                                     <a href="/warehouse_admin/sparepart/input_spareparts">
-                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Validator</p>
+                                        <p className='
+                                         text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Validator</p>
                                     </a>
                                 </div>
                                 <div className=' w-96 py-1 bg-[#EAEAEA] flex rounded-md px-2 gap-1'>
@@ -186,7 +138,7 @@ const sparepartpage = () => {
                                             <th className=' w-64 border-r'>Price</th>
                                             <th className=' w-56 border-r'>Category</th>
                                             <th className=' w-56 border-r'>Quantity</th>
-                                            <th className=' '>Action</th>
+                                            <th className=' '>Validation</th>
                                         </tr>
                                     </thead>
                                     <tbody className=''>
@@ -194,21 +146,17 @@ const sparepartpage = () => {
                                         {filteredSpareparts.map((item, index) => (
                                             <tr key={item.id} className='border-b'>
                                                 <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
-                                                <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
-                                                <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
-                                                <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
-                                                <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
+                                                <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'></td>
+                                                <td className=' w-64 py-1 text-center border-r'></td>
+                                                <td className=' w-56 py-1 text-center border-r'></td>
+                                                <td className=' w-56 py-1 text-center border-r'></td>
                                                 <td className=' h-auto px-2 py-2 flex m-auto'>
                                                     <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'
-                                                        onClick={() => handlePopup(item.id)}
+                                                        onClick={() => handleUpdateClick(item.id)}
                                                     >
                                                         <BiEdit className='mx-auto text-xl ' />
                                                     </div>
-                                                    <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto  '
-                                                        onClick={() => handleDelete(item.id)}
-                                                    >
-                                                        <BsTrash3 className='mx-auto text-xl ' />
-                                                    </div>
+
                                                 </td>
                                             </tr>
                                         ))}
@@ -218,8 +166,7 @@ const sparepartpage = () => {
                         </div>
                     </div>
                 </div>
-                <EditSparepartForm isVisible={showDetail} onClose={() => setShowItem(false)} />
-            </div >
+            </div>
         </>
 
     )

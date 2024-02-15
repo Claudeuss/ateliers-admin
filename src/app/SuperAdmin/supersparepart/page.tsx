@@ -6,9 +6,11 @@ import React, { useEffect, useState } from 'react';
 import { BiEdit, BiSearch } from 'react-icons/bi';
 import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs';
 import { SlSocialDropbox } from 'react-icons/sl';
-import { auth, db } from '../../../../../lib/firebase/page';
+
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from '../../../../lib/firebase/page';
+import SidebarSuper from '@/components/sidebar_super';
 import EditSparepartForm from '@/components/EditSparepartForm';
 
 interface Sparepart {
@@ -30,37 +32,6 @@ const sparepartpage = () => {
 
     const { push } = useRouter();
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            if (currentUser) {
-                try {
-                    // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
-                    const userDocRef = doc(db, 'account', currentUser.uid);
-                    const userDocSnapshot = await getDoc(userDocRef);
-
-                    if (userDocSnapshot.exists()) {
-                        const userRole = userDocSnapshot.data().role;
-
-                        if (userRole === 'gudang') {
-                            push('/warehouse_admin/sparepart/sparepartpage');
-                        } else if (userRole === 'kasir') {
-                            push('/');
-                        } else {
-                            // Handle other roles or no role as needed
-                        }
-                    } else {
-                        // Handle the case where user data doesn't exist in the database
-                    }
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
-                }
-            } else {
-                push('/login_admin');
-            }
-        });
-
-        return () => unsubscribe();
-    }, [auth, push]);
 
     useEffect(
         () => {
@@ -129,9 +100,11 @@ const sparepartpage = () => {
         setNewName(data[0].newName);
         setNewType(data[0].newType);
     };
+
+
     const handlePopup = async (id: any) => {
         // Set the service ID in the URL
-        router.push(`/warehouse_admin/sparepart/sparepartpage?id=${id}`);
+        router.push(`/SuperAdmin/supersparepart?id=${id}`);
         // Show the update modal
         // const docRef = doc(db, "service", idd);
         // const docSnap = await getDoc(docRef);

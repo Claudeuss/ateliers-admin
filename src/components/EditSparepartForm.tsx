@@ -7,7 +7,7 @@ import { BiMinus, BiPlus } from 'react-icons/bi';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-const EditSparepartForm = ({ }: {}) => {
+const EditSparepartForm = ({ isVisible, onClose }: { isVisible?: any, onClose?: any }) => {
 
     // variabel
     const [name, setName] = useState('');
@@ -18,6 +18,7 @@ const EditSparepartForm = ({ }: {}) => {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
+
     const router = useRouter();
 
     // variabel Quantity
@@ -40,14 +41,17 @@ const EditSparepartForm = ({ }: {}) => {
 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    setName(data.name);
-                    setType(data.type)
-                    setPrice(data.price);
-                    setCount(data.quantity);
-                    setDesc(data.description);
+                    console.log('Fetched Data:', data);
 
-                    // Fetch selected category
-                    setSelectedCategory(data.category || '');
+                    // Update state variables with fetched data
+                    setName(data.name);
+                    setType(data.type);
+                    setPrice(data.price);
+                    setDesc(data.description);  // Assuming desc is a field in your data
+                    setSelectedCategory(data.category);
+                    setCount(data.quantity);
+
+                    // ... (rest of your code)
                 }
             } catch (error) {
                 console.error('Error fetching document:', error);
@@ -55,7 +59,8 @@ const EditSparepartForm = ({ }: {}) => {
         };
 
         fetchData(id);
-    }, []);
+    }, [id]); // Include 'id' in the dependency array to rerun effect when 'id' changes
+
 
     // Update Query to database
     const handleUpdate = async (idd: any) => {
@@ -89,12 +94,15 @@ const EditSparepartForm = ({ }: {}) => {
                     type: type,
                     price: price,
                     quantity: count,
+                    description: desc,
                     category: selectedCategory,
                     assets: downloadURLs, // Assuming 'imageUrl' is the field for the image URL
                 });
 
                 alert('Edit Success');
-                router.push('/warehouse_admin/sparepart/sparepartpage');
+
+                router.push('/SuperAdmin/supersparepart/');
+                onClose();
             } catch (error) {
                 console.error('Error uploading images:', error);
             }
@@ -105,11 +113,12 @@ const EditSparepartForm = ({ }: {}) => {
                 type: type,
                 price: price,
                 quantity: count,
+                description: desc,
                 category: selectedCategory,
             });
 
-            alert('Edit Success');
-            router.push('/warehouse_admin/sparepart/sparepartpage');
+            alert('Edit Failed');
+            router.push('/SuperAdmin/supersparepart');
         }
     };
 
@@ -122,8 +131,9 @@ const EditSparepartForm = ({ }: {}) => {
 
 
 
+    if (!isVisible) return null;
     return (
-        <div className='w-full min-h-screen pl-28 bg-[#EAEAEA] overflow-hidden'>
+        <div className='w-[1200] mx-4  min-h-screen bg-[#EAEAEA] overflow-hidden'>
             <div className=' p-5 '>
                 <h2 className='text-2xl font-semibold '>Edit Sparepart</h2>
                 <form
@@ -139,7 +149,7 @@ const EditSparepartForm = ({ }: {}) => {
                             className=' w-3/4 text-base font-normal bg-white rounded-md border border-slate-400 outline-blue-700 px-2'
                             type="text"
                             value={name}
-                            onChange={(e) => setName(e.target.value)} />
+                            onChange={(event) => setName(event.target.value)} />
                     </label>
                     <label className=' w-full flex justify-between text-xl font-semibold py-2 my-auto'>
                         type
@@ -200,10 +210,10 @@ const EditSparepartForm = ({ }: {}) => {
                             className=' w-3/4 text-base bg-white rounded-md border border-slate-400 outline-blue-700 px-2'
                             type="text"
                             value={price}
-                            onChange={(e) => setPrice(e.target.value)} />
+                            onChange={(event) => setPrice(event.target.value)} />
                     </label>
                     <label className=' w-full flex justify-between text-xl font-semibold py-2'>
-                        Price
+                        Description
                         <textarea
                             name=""
                             id=""

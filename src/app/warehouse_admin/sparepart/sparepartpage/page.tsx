@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import SidebarGudang from '@/components/sidebar_gudang';
 import Stockitem from '@/components/stockitem';

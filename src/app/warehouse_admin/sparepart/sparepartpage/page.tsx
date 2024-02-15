@@ -2,13 +2,15 @@
 import SidebarGudang from '@/components/sidebar_gudang';
 import Stockitem from '@/components/stockitem';
 import { QuerySnapshot, collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+
 import { BiEdit, BiSearch } from 'react-icons/bi';
 import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs';
 import { SlSocialDropbox } from 'react-icons/sl';
 import { auth, db } from '../../../../../lib/firebase/page';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
+import EditSparepartForm from '@/components/EditSparepartForm';
+import { useEffect, useState } from 'react';
 
 interface Sparepart {
     id: string;
@@ -128,15 +130,30 @@ const sparepartpage = () => {
         setNewName(data[0].newName);
         setNewType(data[0].newType);
     };
+    const handlePopup = async (id: any) => {
+        // Set the service ID in the URL
+        router.push(`/warehouse_admin/sparepart/sparepartpage?id=${id}`);
+        // Show the update modal
+        // const docRef = doc(db, "service", idd);
+        // const docSnap = await getDoc(docRef);
+        // let data: any[] = [];
+        // data.push(docSnap.data());
+        // setNewServiceid(data[0].serviceid)
+        // setNewMototype(data[0].mototype)
+        // setNewOwner(data[0].owner)
+        // setNewAddress(data[0].address)
+        // setNewStatus(data[0].status)
+        setShowItem(true);
+    };
 
-
+    const [showDetail, setShowItem] = useState(false);
     return (
         <>
             <SidebarGudang />
             <div className=' w-full pl-28 bg-[#EAEAEA] overflow-hidden'>
                 <div className=' p-5'>
-                    <h1 className=' text-2xl font-semibold'>Sparepart</h1>
-                    <div className='px-5 py-3'>
+                    <h1 className='mx-3 text-2xl font-semibold'>Sparepart</h1>
+                    <div className='px-3 py-3'>
                         <div className=' grid grid-cols-3 gap-4 pb-4'>
                             <Stockitem icon={<BsBoxes className=" text-white m-auto text-4xl" />} title={'Total Stock'} total={spareparts.filter((item) => item.quantity >= 1).length} />
                             <Stockitem icon={<BsBoxSeam className=" text-white m-auto text-4xl" />} title={'Low Stock'} total={spareparts.filter((item) => item.quantity < 10 && item.quantity >= 1).length} />
@@ -147,7 +164,7 @@ const sparepartpage = () => {
                                 <div className='flex gap-5 justify-between'>
                                     <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Sparepart Data</p>
                                     <a href="/warehouse_admin/sparepart/input_spareparts">
-                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Add Spareparts</p>
+                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Validator</p>
                                     </a>
                                 </div>
                                 <div className=' w-96 py-1 bg-[#EAEAEA] flex rounded-md px-2 gap-1'>
@@ -184,7 +201,7 @@ const sparepartpage = () => {
                                                 <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
                                                 <td className=' h-auto px-2 py-2 flex m-auto'>
                                                     <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'
-                                                        onClick={() => handleUpdateClick(item.id)}
+                                                        onClick={() => handlePopup(item.id)}
                                                     >
                                                         <BiEdit className='mx-auto text-xl ' />
                                                     </div>
@@ -202,7 +219,8 @@ const sparepartpage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+                <EditSparepartForm isVisible={showDetail} onClose={() => setShowItem(false)} />
+            </div >
         </>
 
     )

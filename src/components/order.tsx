@@ -126,7 +126,7 @@ const Order = () => {
                                 quantity: orderData.quantity,
                                 assets: orderData.assets,
                                 description: orderData.description,
-                                customer: selectedCustomer, // Include the selected customer name
+                                customer: selectedCustomerName, // Include the selected customer name
                                 timestamp: serverTimestamp(),
                             });
 

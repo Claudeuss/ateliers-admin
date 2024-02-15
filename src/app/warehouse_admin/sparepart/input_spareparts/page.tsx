@@ -129,7 +129,7 @@ const AddPage = () => {
 
     // Function to send data to the database
     const AddData = async () => {
-        alert('Adding data...');
+        
         try {
             // Add the document to the collection
             await addDoc(usersCollectionRef, {

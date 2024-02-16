@@ -190,11 +190,11 @@ const sparepartpage = () => {
                                         </tr>
                                     </thead>
                                     <tbody className=''>
-
-                                        {filteredSpareparts.map((item, index) => (
+                                       
+                                        {filteredSpareparts.filter(item => item.status !== 'invalid').map((item, index) => (
                                             <tr key={item.id} className='border-b'>
                                                 <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
-                                                <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
+                                                <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{ item.name}</td>
                                                 <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
                                                 <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
                                                 <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>

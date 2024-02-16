@@ -161,7 +161,7 @@ const AddPage = () => {
     return (
         <>
             <SidebarGudang />
-            <div className=' pl-28 bg-[#EAEAEA]'>
+            <div className='min-h-screen pl-28 bg-[#EAEAEA]'>
                 <div className='p-5'>
                     <h1 className=' text-2xl font-semibold pb-4'>Sparepart</h1>
                     <div className=' w-full h-full bg-white rounded-md py-2'>

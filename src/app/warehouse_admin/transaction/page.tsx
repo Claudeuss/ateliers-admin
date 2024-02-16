@@ -46,7 +46,7 @@ const TransactionPage = () => {
     return (
         <>
             <SidebarGudang />
-            <div className="pl-28 w-full h-screen bg-[#eaeaea]">
+            <div className="min-h-screen pl-28 w-full h-screen bg-[#eaeaea]">
                 <div className="p-5">
                     <div className="justify-between flex">
                         <h1 className="text-2xl font-semibold">Transaction</h1>

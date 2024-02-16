@@ -137,7 +137,7 @@ const AddPage = () => {
                 name: newName,
                 type: newType,
                 price: newPrice,
-                newStatus: status,
+                status: status,
                 description: newDesc,
                 assets: downloadURL,
                 quantity: count,

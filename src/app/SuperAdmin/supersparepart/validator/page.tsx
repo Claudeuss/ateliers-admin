@@ -65,38 +65,35 @@ const Page = () => {
                         <table className="table w-full">
                             <thead className='bg-[#D9D9D9]'>
                                 <tr className='P-4'>
-                                    <th><p className='w-24 border-r text-center'>No</p></th>
-                                    <th className='w-42 border-r text-center'>Name</th>
-                                    <th><p className='w-42 border-r text-center'>Category</p></th>
-                                    <th><p className='w-42 border-r text-center'>Type</p></th>
-                                    <th><p className='w-42 border-r text-center'>Quantity</p></th>
-                                    <th><p className='w-42 border-r text-center'>Price</p></th>
-                                    <th><p className='w-56 text-center'>Validation</p></th>
+                                    <th><p className='w-10 py-2'>No</p></th>
+                                    <th className='w-1/4 py-2'>Name</th>
+                                    <th className='w-1/4 py-2'>Category</th>
+                                    <th className='w-44 py-2'>Type</th>
+                                    <th className='w-44 py-2'>Quantity</th>
+                                    <th className='w-52 py-2'>Price</th>
+                                    <th className='w-52 py-2'>Validation</th>
                                 </tr>
                             </thead>
-                            <tbody className='overflow-y-auto overflow-x-hidden h-[60px]'>
-                                {validator.map((valid, index) => (
-                                    <tr key={valid.id}>
-                                        <td><p className='w-24 py-1 text-center border-r'>{index + 1}</p></td>
-                                        <td><p className='w-42 py-1 text-center border-r'>{valid.name}</p></td>
-                                        <td><p className='w-42 py-1 text-center border-r'>{valid.category}</p></td>
-                                        <td><p className='w-42 py-1 text-center border-r'>{valid.type}</p></td>
-                                        <td><p className='w-42 py-1 text-center border-r'>{valid.quantity}</p></td>
-                                        <td><p className='w-42 py-1 text-center border-r'>{valid.price}</p></td>
+                            <tbody className='overflow-y-auto overflow-x-hidden'>
+    {validator
+        .filter(valid => valid.status !== 'valid') // Filter data yang statusnya bukan 'valid'
+        .map((valid, index) => (
+            <tr key={valid.id}>
+                <td className='text-center border-r'>{index + 1}</td>
+                <td className='text-center border-r'>{valid.name}</td>
+                <td className='text-center border-r  px-2'>{valid.category}</td>
+                <td className='text-center border-r'>{valid.type}</td>
+                <td className='text-center border-r'>{valid.quantity} </td>
+                <td className='text-center border-r'>{valid.price} </td>
+                <td className='w-56 py-1 text-center'>
+                    <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto' onClick={() => handleStatusUpdate(valid.id)}>
+                        <BiEdit className='mx-auto text-xl ' />
+                    </div>
+                </td>
+            </tr>
+        ))}
+</tbody>
 
-
-                                        <td className='w-56 py-1 text-center'>
-                            <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto' onClick={() => handleStatusUpdate(valid.id)}>
-                                <BiEdit className='mx-auto text-xl ' />
-                            </div>
-                        </td>
-
-
-
-                                    </tr>
-                                ))}
-
-                            </tbody>
                         </table>
 
                     </div>

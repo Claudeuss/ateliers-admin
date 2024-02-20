@@ -196,45 +196,46 @@ const sparepartpage = () => {
                                             className=' w-full px-2 bg-transparent border-none outline-none' />
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div className=' mt-2 h-[340px] overflow-y-scroll'>
-                                <table className=' table border-t-2 border-black  w-full'>
+                                <table className=' table border-t-2 bor
+                                der-black  w-full'>
                                     <thead className=' border-b'>
                                         <tr>
                                             <th className=' w-10 border-r'>Id</th>
-                                            <th className=' w-64 xl:w-1/4 border-r'>Name</th>
-                                            <th className=' w-64 xl:w-1/4 border-r'>Price</th>
-                                            <th className=' w-56 border-r'>Category</th>
-                                            <th className=' w-56 border-r'>Quantity</th>
-                                            <th className=' '>Action</th>
+                                            <th className=' md:w-64 xl:max-w-1/4 border-r'>Name</th>
+                                            <th className=' md:w-64 xl:max-w-1/4 border-r'>Price</th>
+                                            <th className='w-56 border-r'>Category</th>
+                                            <th className='w-56 border-r'>Quantity</th>
+                                            <th className=' w-40'>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody className=''>
-                                       {/* Gunakan statusFilter untuk menyaring item */}
+                                        {/* Gunakan statusFilter untuk menyaring item */}
                                         {filteredSpareparts
                                             .filter(item => !statusFilter || item.status === statusFilter)
                                             .map((item, index) => (
-                                            <tr key={item.id} className='border-b'>
-                                                <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
-                                                <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{ item.name}</td>
-                                                <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
-                                                <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
-                                                <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
-                                                <td className=' h-auto px-2 py-2 flex m-auto'>
-                                                    <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'
-                                                        onClick={() => handlePopup(item.id)}
-                                                    >
-                                                        <BiEdit className='mx-auto text-xl ' />
-                                                    </div>
-                                                    <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto  '
-                                                        onClick={() => handleDelete(item.id)}
-                                                    >
-                                                        <BsTrash3 className='mx-auto text-xl ' />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                                <tr key={item.id} className='border-b'>
+                                                    <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
+                                                    <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
+                                                    <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
+                                                    <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
+                                                    <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
+                                                    <td className=' h-auto px-2 py-2 flex m-auto'>
+                                                        <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'
+                                                            onClick={() => handlePopup(item.id)}
+                                                        >
+                                                            <BiEdit className='mx-auto text-xl ' />
+                                                        </div>
+                                                        <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto  '
+                                                            onClick={() => handleDelete(item.id)}
+                                                        >
+                                                            <BsTrash3 className='mx-auto text-xl ' />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                     </tbody>
                                 </table>
                             </div>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import SidebarGudang from '@/components/sidebar_gudang';
 import Stockitem from '@/components/stockitem';
@@ -135,7 +136,7 @@ const sparepartpage = () => {
                             <div className=' flex px-5 justify-between'>
                                 <div className='flex gap-5 justify-between'>
                                     <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Sparepart Data</p>
-                                    <a href="/warehouse_admin/sparepart/input_spareparts">
+                                    <a href="/SuperAdmin/supersparepart/validator">
                                         <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Validator</p>
                                     </a>
                                 </div>

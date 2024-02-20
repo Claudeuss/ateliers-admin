@@ -130,14 +130,14 @@ const AddPage = () => {
 
     // Function to send data to the database
     const AddData = async () => {
-        alert('Adding data...');
+        
         try {
             // Add the document to the collection
             await addDoc(usersCollectionRef, {
                 name: newName,
                 type: newType,
                 price: newPrice,
-                newStatus: status,
+                status: status,
                 description: newDesc,
                 assets: downloadURL,
                 quantity: count,

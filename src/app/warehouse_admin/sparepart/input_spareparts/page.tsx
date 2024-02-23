@@ -69,7 +69,7 @@ const AddPage = () => {
         }
     }
 
-    
+
 
     // Function to handle file upload
     const handleSelectedFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,7 +128,7 @@ const AddPage = () => {
 
     // Function to send data to the database
     const AddData = async () => {
-        
+
         try {
             // Add the document to the collection
             await addDoc(usersCollectionRef, {
@@ -152,6 +152,7 @@ const AddPage = () => {
             setNewDesc('');
             setDownloadURL([]);
             setCount(0);
+            push('/warehouse_admin/sparepart/input_spareparts');
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
             alert('Error adding data: ' + errorMessage);

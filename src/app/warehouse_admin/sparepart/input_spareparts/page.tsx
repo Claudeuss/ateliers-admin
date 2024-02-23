@@ -9,6 +9,19 @@ import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const AddPage = () => {
+    const [newName, setNewName] = useState<string>('');
+    const [status] = useState<string>('invalid');
+    const [newType, setNewType] = useState<string>('');
+    const [newCategory, setNewCategory] = useState<string>('');
+    const [newPrice, setNewPrice] = useState<string>('');
+    const [newDesc, setNewDesc] = useState<string>('');
+    const [downloadURL, setDownloadURL] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [downloadURLs, setDownloadURLs] = useState<string[]>([]);
+
+
+    const [img, setImg] = useState('')
+    const usersCollectionRef = collection(db, "sparepart")
 
     const { push } = useRouter();
 
@@ -56,17 +69,7 @@ const AddPage = () => {
         }
     }
 
-    const [newName, setNewName] = useState<string>('');
-    const [status] = useState<string>('invalid');
-    const [newType, setNewType] = useState<string>('');
-    const [newCategory, setNewCategory] = useState<string>('');
-    const [newPrice, setNewPrice] = useState<string>('');
-    const [newDesc, setNewDesc] = useState<string>('');
-    const [downloadURL, setDownloadURL] = useState<string[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const [img, setImg] = useState('')
-    const usersCollectionRef = collection(db, "sparepart")
+    
 
     // Function to handle file upload
     const handleSelectedFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,13 +113,8 @@ const AddPage = () => {
             });
 
             try {
-                // Wait for all files to be uploaded
                 const downloadURLs = await Promise.all<string>(uploadTasks);
-
-                // Set the download URLs in state or use them as needed
-                setDownloadURL(downloadURLs);
-
-                // Perform additional actions if needed, for example, update state or send to backend
+                setDownloadURLs((prevDownloadURLs) => [...prevDownloadURLs, ...downloadURLs]);
             } catch (error) {
                 console.error('Error uploading files:', error);
                 alert('Error uploading files: ' + error);
@@ -130,16 +128,16 @@ const AddPage = () => {
 
     // Function to send data to the database
     const AddData = async () => {
-        alert('Adding data...');
+        
         try {
             // Add the document to the collection
             await addDoc(usersCollectionRef, {
                 name: newName,
                 type: newType,
                 price: newPrice,
-                newStatus: status,
+                status: status,
                 description: newDesc,
-                assets: downloadURL,
+                assets: downloadURLs,
                 quantity: count,
                 category: newCategory
             });
@@ -163,7 +161,7 @@ const AddPage = () => {
     return (
         <>
             <SidebarGudang />
-            <div className=' pl-28 bg-[#EAEAEA]'>
+            <div className='min-h-screen pl-28 bg-[#EAEAEA]'>
                 <div className='p-5'>
                     <h1 className=' text-2xl font-semibold pb-4'>Sparepart</h1>
                     <div className=' w-full h-full bg-white rounded-md py-2'>

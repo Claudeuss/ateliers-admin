@@ -8,6 +8,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../../lib/firebase/page';
 import PopupItemService from './popup_item_service';
 import { QuerySnapshot, addDoc, collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, updateDoc } from 'firebase/firestore';
+import jsPDF from 'jspdf';
 
 const Order = () => {
     const ordersCollectionRef = collection(db, "orders")
@@ -125,7 +126,7 @@ const Order = () => {
                                 quantity: orderData.quantity,
                                 assets: orderData.assets,
                                 description: orderData.description,
-                                customer: selectedCustomer, // Include the selected customer name
+                                customer: selectedCustomerName, // Include the selected customer name
                                 timestamp: serverTimestamp(),
                             });
 
@@ -149,6 +150,8 @@ const Order = () => {
                 }
             }
 
+            // transaction documents
+            generatePDF(orders, selectedCustomerName, newTotalPrice);
             setOrders([]);
             alert('Payment successful!');
         } catch (error) {
@@ -157,6 +160,32 @@ const Order = () => {
     };
 
 
+    const generatePDF = (orders: any[], customerName: string | null, totalPrice: number) => {
+        const doc = new jsPDF('p', 'mm', 'a4'); // Specify page orientation and unit
+
+        // Add content to the PDF document
+        doc.setFontSize(12);
+        doc.text('Shopping Receipt', 15, 15);
+
+        let yOffset = 30; // Initial y-offset for content
+
+        // Add order details
+        orders.forEach((order, index) => {
+            const itemDetails = `${order.name} - Rp. ${order.totalprice}`;
+            doc.text(itemDetails, 15, yOffset + index * 10);
+        });
+
+        // Add customer name
+        yOffset += orders.length * 10 + 10;
+        doc.text(`Customer: ${customerName || 'N/A'}`, 15, yOffset);
+
+        // Add total price
+        yOffset += 10;
+        doc.text(`Total Price: Rp. ${totalPrice}`, 15, yOffset);
+
+        // Save the PDF document
+        doc.save('shopping_receipt.pdf');
+    };
 
     // useEffect(() => {
     //     // Calculate

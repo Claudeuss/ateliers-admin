@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import SidebarGudang from '@/components/sidebar_gudang';
 import Stockitem from '@/components/stockitem';
 import { QuerySnapshot, collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+
 import { BiEdit, BiSearch } from 'react-icons/bi';
 import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs';
 import { SlSocialDropbox } from 'react-icons/sl';
@@ -10,6 +11,7 @@ import { auth, db } from '../../../../../lib/firebase/page';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import EditSparepartForm from '@/components/EditSparepartForm';
+import { useEffect, useState } from 'react';
 
 interface Sparepart {
     id: string;
@@ -27,6 +29,7 @@ const sparepartpage = () => {
     const [newType, setNewType] = useState('')
     const [newCategory, setNewCategory] = useState('')
     const [newPrice, setNewPRice] = useState('')
+    const [statusFilter, setStatusFilter] = useState<string>(''); // Initialize with an empty string for default display
 
     const { push } = useRouter();
 
@@ -145,11 +148,16 @@ const sparepartpage = () => {
         setShowItem(true);
     };
 
+    // Fungsi untuk mengubah nilai filter status saat dropdown dipilih
+    const handleStatusFilterChange = (status: string) => {
+        setStatusFilter(status);
+    };
+
     const [showDetail, setShowItem] = useState(false);
     return (
         <>
             <SidebarGudang />
-            <div className=' w-full pl-28 bg-[#EAEAEA] overflow-hidden'>
+            <div className='min-h-screen w-full pl-28 bg-[#EAEAEA] overflow-hidden'>
                 <div className=' p-5'>
                     <h1 className='mx-3 text-2xl font-semibold'>Sparepart</h1>
                     <div className='px-3 py-3'>
@@ -163,55 +171,71 @@ const sparepartpage = () => {
                                 <div className='flex gap-5 justify-between'>
                                     <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Sparepart Data</p>
                                     <a href="/warehouse_admin/sparepart/input_spareparts">
-                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Input Sparepart </p>
+                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Validator</p>
                                     </a>
                                 </div>
-                                <div className=' w-96 py-1 bg-[#EAEAEA] flex rounded-md px-2 gap-1'>
-                                    <BiSearch className=' text-slate-700 text-xl m-auto' />
-                                    <input
-                                        placeholder='Search...'
-                                        type="text"
-                                        name="search"
-                                        value={searchQuery}
-                                        onChange={handleSearch}
-                                        className=' w-full px-2 bg-transparent border-none outline-none' />
+                                <div className='flex gap-2'>
+                                    {/* Dropdown untuk memilih status */}
+                                    <select
+                                        value={statusFilter}
+                                        onChange={(e) => handleStatusFilterChange(e.target.value)}
+                                        className='w-full px-2 bg-[#1b24ff] border-none rounded-md outline-none font-semibold text-white'
+                                    >
+                                        <option className='' value=''>All Status</option>
+                                        <option value='valid'>Valid</option>
+                                        <option value='invalid'>Invalid</option>
+                                    </select>
+                                    <div className=' w-96 py-1 bg-[#EAEAEA] flex rounded-md px-2 gap-1'>
+                                        <BiSearch className=' text-slate-700 text-xl m-auto' />
+                                        <input
+                                            placeholder='Search...'
+                                            type="text"
+                                            name="search"
+                                            value={searchQuery}
+                                            onChange={handleSearch}
+                                            className=' w-full px-2 bg-transparent border-none outline-none' />
+                                    </div>
                                 </div>
+
                             </div>
                             <div className=' mt-2 h-[340px] overflow-y-scroll'>
-                                <table className=' table border-t-2 border-black  w-full'>
+                                <table className=' table border-t-2 bor
+                                der-black  w-full'>
                                     <thead className=' border-b'>
                                         <tr>
                                             <th className=' w-10 border-r'>Id</th>
-                                            <th className=' w-64 border-r'>Name</th>
-                                            <th className=' w-64 border-r'>Price</th>
-                                            <th className=' w-56 border-r'>Category</th>
-                                            <th className=' w-56 border-r'>Quantity</th>
-                                            <th className=' '>Action</th>
+                                            <th className=' md:w-64 xl:max-w-1/4 border-r'>Name</th>
+                                            <th className=' md:w-64 xl:max-w-1/4 border-r'>Price</th>
+                                            <th className='w-56 border-r'>Category</th>
+                                            <th className='w-56 border-r'>Quantity</th>
+                                            <th className=' w-40'>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody className=''>
-
-                                        {filteredSpareparts.map((item, index) => (
-                                            <tr key={item.id} className='border-b'>
-                                                <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
-                                                <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
-                                                <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
-                                                <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
-                                                <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
-                                                <td className=' h-auto px-2 py-2 flex m-auto'>
-                                                    <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'
-                                                        onClick={() => handlePopup(item.id)}
-                                                    >
-                                                        <BiEdit className='mx-auto text-xl ' />
-                                                    </div>
-                                                    <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto  '
-                                                        onClick={() => handleDelete(item.id)}
-                                                    >
-                                                        <BsTrash3 className='mx-auto text-xl ' />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                        {/* Gunakan statusFilter untuk menyaring item */}
+                                        {filteredSpareparts
+                                            .filter(item => !statusFilter || item.status === statusFilter)
+                                            .map((item, index) => (
+                                                <tr key={item.id} className='border-b'>
+                                                    <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
+                                                    <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
+                                                    <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
+                                                    <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
+                                                    <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
+                                                    <td className=' h-auto px-2 py-2 flex m-auto'>
+                                                        <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'
+                                                            onClick={() => handlePopup(item.id)}
+                                                        >
+                                                            <BiEdit className='mx-auto text-xl ' />
+                                                        </div>
+                                                        <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto  '
+                                                            onClick={() => handleDelete(item.id)}
+                                                        >
+                                                            <BsTrash3 className='mx-auto text-xl ' />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                     </tbody>
                                 </table>
                             </div>

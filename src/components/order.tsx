@@ -12,6 +12,7 @@ import jsPDF from 'jspdf';
 
 const Order = () => {
     const ordersCollectionRef = collection(db, "orders")
+    
     const handleCustomerSelection = (customerName: any) => {
         console.log('Selected Customer:', customerName);
 
@@ -151,7 +152,7 @@ const Order = () => {
             }
 
             // transaction documents
-            generatePDF(orders, selectedCustomerName, newTotalPrice);
+            generatePDF();
             setOrders([]);
             alert('Payment successful!');
         } catch (error) {
@@ -160,31 +161,21 @@ const Order = () => {
     };
 
 
-    const generatePDF = (orders: any[], customerName: string | null, totalPrice: number) => {
-        const doc = new jsPDF('p', 'mm', 'a4'); // Specify page orientation and unit
-
-        // Add content to the PDF document
-        doc.setFontSize(12);
-        doc.text('Shopping Receipt', 15, 15);
-
-        let yOffset = 30; // Initial y-offset for content
-
-        // Add order details
-        orders.forEach((order, index) => {
-            const itemDetails = `${order.name} - Rp. ${order.totalprice}`;
-            doc.text(itemDetails, 15, yOffset + index * 10);
-        });
-
-        // Add customer name
-        yOffset += orders.length * 10 + 10;
-        doc.text(`Customer: ${customerName || 'N/A'}`, 15, yOffset);
-
-        // Add total price
+    const generatePDF = () => {
+        const doc = new jsPDF();
+        let yOffset = 10;
+        doc.setFont('Arial', 'normal');
+        doc.setFontSize(10);
+        doc.text('Struk Belanja', 70, yOffset);
         yOffset += 10;
-        doc.text(`Total Price: Rp. ${totalPrice}`, 15, yOffset);
-
-        // Save the PDF document
-        doc.save('shopping_receipt.pdf');
+        orders.forEach(order => {
+            doc.text(`${order.name} - Rp. ${order.totalprice}`, 10, yOffset);
+            yOffset += 7;
+        });
+        doc.text(`Total Price: Rp. ${newTotalPrice},00`, 10, yOffset);
+        yOffset += 10;
+        doc.text(`Customer: ${selectedCustomerName || 'N/A'}`, 10, yOffset);
+        doc.save('Struk-Belanja.pdf');
     };
 
     // useEffect(() => {

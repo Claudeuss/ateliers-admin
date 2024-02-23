@@ -13,6 +13,7 @@ const Page = () => {
     
     const usersCollectionRef = collection(db, "sparepart")
     const [validator, setValidator] = useState<any[]>([]); // Replace 'any[]' with the appropriate type for your users
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const getUsers = async () => {
@@ -48,54 +49,63 @@ const Page = () => {
             console.error('Error updating status:', error);
         }
     };
+
+    const filteredValidator = validator.filter(valid =>
+        valid.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <>
             <SidebarSuper/>
-            <div className=' pl-28 w-full h-screen bg-[#eaeaea]'>
+            <div className='pl-28 w-full h-screen bg-[#eaeaea]'>
                 <div className='p-5'>
-                    <div className=' justify-between flex'>
-                        <h1 className=' text-2xl font-semibold'>User</h1>
+                    <div className='justify-between flex mb-4'>
+                        <h1 className='text-2xl font-semibold'>Validator</h1>
                         <div className='flex w-[400px] h-8 my-auto bg-white gap-2 py-1 px-2 rounded-md shadow-sm shadow-slate-500 items-center'>
-                            <BsSearch className=' text-slate-700' />
-                            <input placeholder='Search Here' type="search" name="" id="" className=' w-full border-none outline-none text-base' />
+                            <BsSearch className='text-slate-700' />
+                            <input
+                                placeholder='Search Here'
+                                type='search'
+                                name=''
+                                id=''
+                                className='w-full border-none outline-none text-base'
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
                         </div>
                     </div>
-                   <div className="bg-white drop-shadow-lg h-[230px] overflow-y-auto overflow-x-hidden ">
-
-                        <table className="table w-full">
+                    <div className="bg-white drop-shadow-lg overflow-hidden rounded-lg">
+                        <table className="w-full">
                             <thead className='bg-[#D9D9D9]'>
                                 <tr className='P-4'>
-                                    <th><p className='w-10 py-2'>No</p></th>
-                                    <th className='w-1/4 py-2'>Name</th>
-                                    <th className='w-1/4 py-2'>Category</th>
-                                    <th className='w-44 py-2'>Type</th>
-                                    <th className='w-44 py-2'>Quantity</th>
-                                    <th className='w-52 py-2'>Price</th>
-                                    <th className='w-52 py-2'>Validation</th>
+                                    <th className='py-2'>No</th>
+                                    <th className='py-2'>Name</th>
+                                    <th className='py-2'>Category</th>
+                                    <th className='py-2'>Type</th>
+                                    <th className='py-2'>Quantity</th>
+                                    <th className='py-2'>Price</th>
+                                    <th className='py-2'>Validation</th>
                                 </tr>
                             </thead>
-                            <tbody className='overflow-y-auto overflow-x-hidden'>
-    {validator
-        .filter(valid => valid.status !== 'valid') // Filter data yang statusnya bukan 'valid'
-        .map((valid, index) => (
-            <tr key={valid.id}>
-                <td className='text-center border-r'>{index + 1}</td>
-                <td className='text-center border-r'>{valid.name}</td>
-                <td className='text-center border-r  px-2'>{valid.category}</td>
-                <td className='text-center border-r'>{valid.type}</td>
-                <td className='text-center border-r'>{valid.quantity} </td>
-                <td className='text-center border-r'>{valid.price} </td>
-                <td className='w-56 py-1 text-center'>
-                    <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto' onClick={() => handleStatusUpdate(valid.id)}>
-                        <BiEdit className='mx-auto text-xl ' />
-                    </div>
-                </td>
-            </tr>
-        ))}
-</tbody>
-
+                            <tbody>
+                                {filteredValidator.filter(valid => valid.status !== 'valid').map((valid, index) => (
+                                        <tr key={valid.id} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
+                                            <td className='text-center py-2'>{index + 1}</td>
+                                            <td className='py-2'>{valid.name}</td>
+                                            <td className='py-2'>{valid.category}</td>
+                                            <td className='py-2'>{valid.type}</td>
+                                            <td className='text-center py-2'>{valid.quantity}</td>
+                                            <td className='text-center py-2'>{valid.price}</td>
+                                            <td className='text-center py-2 '>
+                                                <button className='focus:outline-none flex items-center justify-center text-blue-700 mx-auto px-4 py-1 rounded-md hover:bg-blue-700 hover:text-white' onClick={() => handleStatusUpdate(valid.id)}>
+                                                    <BiEdit className='text-xl mr-1' />
+                                                    Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                            </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>

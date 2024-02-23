@@ -163,7 +163,7 @@ const sparepartpage = () => {
                                 <div className='flex gap-5 justify-between'>
                                     <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Sparepart Data</p>
                                     <a href="/warehouse_admin/sparepart/input_spareparts">
-                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Validator</p>
+                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Input Sparepart </p>
                                     </a>
                                 </div>
                                 <div className=' w-96 py-1 bg-[#EAEAEA] flex rounded-md px-2 gap-1'>

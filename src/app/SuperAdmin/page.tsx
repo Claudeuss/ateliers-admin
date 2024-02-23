@@ -60,7 +60,7 @@ const page: React.FC = () => {
                 <p className='text-xl font-semibold'>Transaction</p>
                 <table className='table w-full overflow-y-auto bg-white rounded-md h-[270px]'>
                   <thead>
-                    <tr className=' border-b border-slate-500'>
+                    <tr className=' border-b border-slate-500 '>
                       <th className='w-10 py-2'>Id</th>
                       <th className='w-1/3 py-2'>Date</th>
                       <th className='w-1/3 py-2'>Product Name</th>
@@ -68,7 +68,7 @@ const page: React.FC = () => {
                       <th className='xl:w-52 py-2'>Customer</th>
                     </tr>
                   </thead>
-                  <tbody className='overflow-auto flex-grow'>
+                  <tbody className='overflow-auto h-20'>
                     {transaction.map((item, index) => (
                       <tr className=' border-b' key={item.id}>
                         <td className='text-center border-r'>{index + 1}</td>

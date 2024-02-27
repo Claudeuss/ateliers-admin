@@ -20,6 +20,8 @@ const SidebarSuper = () => {
 
         ).catch(error => console.log(error))
     }
+
+
     return (
         <div className='py-7 px-5 w-28 h-screen fixed bg-white z-20 top-0 '>
             <div className='px-2 flex flex-col justify-center items-center mb-10'>

@@ -31,9 +31,6 @@ const PopupItemService = ({ isVisible, onClose }: { isVisible?: any, onClose?: a
     return (
         <div className='z-10 fixed inset-0 flex justify-center items-center'>
             <div>
-
-
-
                 <div className='bg-[#EAEAEA] h-screen w-screen'>
                     <div className='pl-28 pr-[360px]'>
                         <div className='px-5 py-3'>

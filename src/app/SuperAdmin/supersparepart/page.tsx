@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import SidebarGudang from '@/components/sidebar_gudang';
 import Stockitem from '@/components/stockitem';
 import { QuerySnapshot, collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
-
 import { BiEdit, BiSearch } from 'react-icons/bi';
 import { BsBoxSeam, BsBoxes, BsTrash3 } from 'react-icons/bs';
 import { SlSocialDropbox } from 'react-icons/sl';
-import { auth, db } from '../../../../../lib/firebase/page';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import EditSparepartForm from '@/components/EditSparepartForm';
 import { useEffect, useState } from 'react';
+import { auth, db } from '../../../../lib/firebase/page';
+import SidebarSuper from '@/components/sidebar_super';
+import SearchBar from '@/components/SearchBar';
 
 interface Sparepart {
     id: string;
@@ -33,37 +33,37 @@ const sparepartpage = () => {
 
     const { push } = useRouter();
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            if (currentUser) {
-                try {
-                    // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
-                    const userDocRef = doc(db, 'account', currentUser.uid);
-                    const userDocSnapshot = await getDoc(userDocRef);
+    // useEffect(() => {
+    //     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    //         if (currentUser) {
+    //             try {
+    //                 // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+    //                 const userDocRef = doc(db, 'account', currentUser.uid);
+    //                 const userDocSnapshot = await getDoc(userDocRef);
 
-                    if (userDocSnapshot.exists()) {
-                        const userRole = userDocSnapshot.data().role;
+    //                 if (userDocSnapshot.exists()) {
+    //                     const userRole = userDocSnapshot.data().role;
 
-                        if (userRole === 'gudang') {
+    //                     if (userRole === 'gudang') {
+    //                         push('/warehouse_admin/sparepart/sparepartpage');
+    //                     } else if (userRole === 'kasir') {
+    //                         push('/');
+    //                     } else {
+    //                         // Handle other roles or no role as needed
+    //                     }
+    //                 } else {
+    //                     // Handle the case where user data doesn't exist in the database
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching user data:', error);
+    //             }
+    //         } else {
+    //             push('/login_admin');
+    //         }
+    //     });
 
-                        } else if (userRole === 'kasir') {
-                            push('/');
-                        } else {
-                            // Handle other roles or no role as needed
-                        }
-                    } else {
-                        // Handle the case where user data doesn't exist in the database
-                    }
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
-                }
-            } else {
-                push('/login_admin');
-            }
-        });
-
-        return () => unsubscribe();
-    }, [auth, push]);
+    //     return () => unsubscribe();
+    // }, [auth, push]);
 
     useEffect(
         () => {
@@ -156,7 +156,7 @@ const sparepartpage = () => {
     const [showDetail, setShowItem] = useState(false);
     return (
         <>
-            <SidebarGudang />
+            <SidebarSuper />
             <div className='min-h-screen w-full pl-28 bg-[#EAEAEA] overflow-hidden'>
                 <div className=' p-5'>
                     <h1 className='mx-3 text-2xl font-semibold'>Sparepart</h1>
@@ -170,8 +170,8 @@ const sparepartpage = () => {
                             <div className=' flex px-5 justify-between'>
                                 <div className='flex gap-5 justify-between'>
                                     <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Sparepart Data</p>
-                                    <a href="/warehouse_admin/sparepart/input_spareparts">
-                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Add Sparepart</p>
+                                    <a href="/SuperAdmin/supersparepart/validator">
+                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Validator</p>
                                     </a>
                                 </div>
                                 <div className='flex gap-2'>

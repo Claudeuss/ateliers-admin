@@ -60,7 +60,7 @@ const Service = () => {
                         <div>
                             <div className='flex justify-between'>
                                 <h1 className='text-2xl font-semibold pb-4'>List Sparepart</h1>
-                                <button className="tracking-wider bg-black text-[#ffffff] py-1   hover:bg-[#1a1a1a] hover:text-white text-center rounded-md transition-all duration-500 w-[300px] mb-2" onClick={() => setShowItem(true)}>
+                                <button className="tracking-wider bg-black text-[#ffffff] py-1   hover:bg-[#1a1a1a] hover:text-white text-center rounded-md transition-all duration-500 w-[250px] mb-2" onClick={() => setShowItem(true)}>
                                     Service
                                 </button>
                             </div>

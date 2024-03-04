@@ -9,7 +9,10 @@ import { auth, db } from '../../../../../lib/firebase/page';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 
+
+
 const EditSparepartPage = () => {
+
 
     return (
         <div>

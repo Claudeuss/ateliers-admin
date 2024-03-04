@@ -8,9 +8,11 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../../lib/firebase/page';
 import PopupItemService from './popup_item_service';
 import { QuerySnapshot, addDoc, collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, updateDoc } from 'firebase/firestore';
+import jsPDF from 'jspdf';
 
 const Order = () => {
     const ordersCollectionRef = collection(db, "orders")
+    
     const handleCustomerSelection = (customerName: any) => {
         console.log('Selected Customer:', customerName);
 
@@ -125,7 +127,7 @@ const Order = () => {
                                 quantity: orderData.quantity,
                                 assets: orderData.assets,
                                 description: orderData.description,
-                                customer: selectedCustomer, // Include the selected customer name
+                                customer: selectedCustomerName, // Include the selected customer name
                                 timestamp: serverTimestamp(),
                             });
 
@@ -149,6 +151,8 @@ const Order = () => {
                 }
             }
 
+            // transaction documents
+            generatePDF();
             setOrders([]);
             alert('Payment successful!');
         } catch (error) {
@@ -157,6 +161,22 @@ const Order = () => {
     };
 
 
+    const generatePDF = () => {
+        const doc = new jsPDF();
+        let yOffset = 10;
+        doc.setFont('Arial', 'normal');
+        doc.setFontSize(10);
+        doc.text('Struk Belanja', 70, yOffset);
+        yOffset += 10;
+        orders.forEach(order => {
+            doc.text(`${order.name} - Rp. ${order.totalprice}`, 10, yOffset);
+            yOffset += 7;
+        });
+        doc.text(`Total Price: Rp. ${newTotalPrice},00`, 10, yOffset);
+        yOffset += 10;
+        doc.text(`Customer: ${selectedCustomerName || 'N/A'}`, 10, yOffset);
+        doc.save('Struk-Belanja.pdf');
+    };
 
     // useEffect(() => {
     //     // Calculate

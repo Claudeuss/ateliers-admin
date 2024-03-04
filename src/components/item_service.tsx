@@ -5,12 +5,15 @@ import { QuerySnapshot, collection, doc, getDoc, getDocs } from 'firebase/firest
 import { db } from '../../lib/firebase/page';
 import PopupUpdateService from './popup_update_service';
 import { useRouter } from 'next/navigation';
+// ... (other imports)
+
 const ItemService = () => {
     const [services, setService] = useState<any[]>([]);
-    const [selectedService, setSelectedService] = useState<any | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [showUpdate, setShowUpdate] = useState(false);
     const router = useRouter();
     const serviceCollectionRef = collection(db, "service");
+
     useEffect(() => {
         const getService = async () => {
             try {
@@ -21,39 +24,52 @@ const ItemService = () => {
             }
         };
         getService();
-    }, []);
-    const handleUpdateClick = async (idd: any) => {
+    }, [serviceCollectionRef]);
+
+    const handleUpdateClick = async (id: any) => {
         // Set the service ID in the URL
-        router.push(`/service?id=${idd}`);
+        router.push(`/service?id=${id}`);
         // Show the update modal
-        // const docRef = doc(db, "service", idd);
-        // const docSnap = await getDoc(docRef);
-        // let data: any[] = [];
-        // data.push(docSnap.data());
-        // setNewServiceid(data[0].serviceid)
-        // setNewMototype(data[0].mototype)
-        // setNewOwner(data[0].owner)
-        // setNewAddress(data[0].address)
-        // setNewStatus(data[0].status)
         setShowUpdate(true);
     };
+
+    const handleCategoryClick = (category: string) => {
+        setSelectedCategory(category);
+    };
+
     return (
         <div className='grid grid-cols-3 gap-3 '>
-
-            <div className="bg-white hover:bg-[#1B24FF] py-1 pb-2  group cursor-pointer hover:shadow-lg shadow-md">
-                <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Not Yet
+            <div
+                className={`bg-white hover:bg-[#1B24FF] py-1 pb-2 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Not Yet' ? 'bg-[#1B24FF]' : ''
+                    }`}
+                onClick={() => handleCategoryClick('Not Yet')}
+            >
+                <h3 className={`text-center text-xs ${selectedCategory === 'Not Yet' ? 'text-white' : 'text-black'} font-semibold `}>
+                    Not Yet
                 </h3>
             </div>
-            <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg  shadow-md">
-                <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">In Process
+            <div
+                className={`bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg  shadow-md ${selectedCategory === 'In Process' ? 'bg-[#1B24FF]' : ''
+                    }`}
+                onClick={() => handleCategoryClick('In Process')}
+            >
+                <h3 className={`text-center text-xs ${selectedCategory === 'In Process' ? 'text-white' : 'text-black'} font-semibold `}>
+                    In Process
                 </h3>
             </div>
-            <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ">
-                <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Done
+            <div
+                className={`bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Done' ? 'bg-[#1B24FF]' : ''
+                    }`}
+                onClick={() => handleCategoryClick('Done')}
+            >
+                <h3 className={`text-center text-xs ${selectedCategory === 'Done' ? 'text-white' : 'text-black'} font-semibold `}>
+                    Done
                 </h3>
             </div>
-            {
-                services.map((service) => (
+            {services
+                .filter((service) => !selectedCategory || service.status === selectedCategory)
+                .map((service) => (
+                    // ... (unchanged code for rendering services)
                     <div key={service.id} className='pt-1'>
                         <div className="rounded-md bg-white p-2 group cursor-pointer hover:shadow-md shadow-lg ">
                             <div className={`m-2 flex justify-between ${service.status === 'Done' ? 'bg-green-500' :
@@ -80,11 +96,11 @@ const ItemService = () => {
                             </div>
                         </div>
                     </div>
-                ))
-            }
+                ))}
             <PopupUpdateService isVisible={showUpdate} onClose={() => setShowUpdate(false)} />
         </div>
     );
-}
+};
 
 export default ItemService;
+

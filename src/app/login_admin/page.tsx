@@ -12,10 +12,6 @@ const Page = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-
-
-
     const onSubmit = async (e: FormEvent) => {
         e.preventDefault();
 

@@ -15,6 +15,7 @@ import { doc, getDoc } from 'firebase/firestore';
 
 export default function Home() {
   const { push } = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -48,6 +49,10 @@ export default function Home() {
     return () => unsubscribe();
   }, [auth, push]);
 
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <Fragment>
       <Sidebar />
@@ -59,39 +64,49 @@ export default function Home() {
               <h1>Welcome to the Main Page,!</h1>
               <h1 className='text-2xl font-semibold'>List Sparepart</h1>
               <div className='pt-3 grid grid-cols-4 gap-3 '>
-                <div className="bg-white hover:bg-[#1B24FF] py-1 pb-2  group cursor-pointer hover:shadow-lg shadow-md">
-
-                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Accesories
+                <div
+                  className={`bg-white hover:bg-[#1B24FF] py-1 pb-2 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Accesories' ? 'bg-[#1B24FF]' : ''
+                    }`}
+                  onClick={() => handleCategoryClick('Accesories')}
+                >
+                  <h3 className={`text-center text-xs ${selectedCategory === 'Accesories' ? 'text-white' : 'text-black'} font-semibold `}>
+                    Accesories
                   </h3>
                 </div>
-                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg  shadow-md">
-
-                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Wheels
+                <div
+                  className={`bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Wheels' ? 'bg-[#1B24FF]' : ''
+                    }`}
+                  onClick={() => handleCategoryClick('Wheels')}
+                >
+                  <h3 className={`text-center text-xs ${selectedCategory === 'Wheels' ? 'text-white' : 'text-black'} font-semibold `}>
+                    Wheels
                   </h3>
                 </div>
-                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ">
-
-                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Engine
+                <div
+                  className={`bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Engine' ? 'bg-[#1B24FF]' : ''
+                    }`}
+                  onClick={() => handleCategoryClick('Engine')}
+                >
+                  <h3 className={`text-center text-xs ${selectedCategory === 'Engine' ? 'text-white' : 'text-black'} font-semibold `}>
+                    Engine
                   </h3>
                 </div>
-                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ">
-
-                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Maintenance
+                <div
+                  className={`bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Maintenance' ? 'bg-[#1B24FF]' : ''
+                    }`}
+                  onClick={() => handleCategoryClick('Maintenance')}
+                >
+                  <h3 className={`text-center text-xs ${selectedCategory === 'Maintenance' ? 'text-white' : 'text-black'} font-semibold `}>
+                    Maintenance
                   </h3>
                 </div>
-
-
-
               </div>
-              <ItemSparepart />
-
+              <ItemSparepart selectedCategory={selectedCategory} />
             </div>
-
           </div>
         </div>
       </div>
       <Order />
-
     </Fragment>
 
   );

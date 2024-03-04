@@ -181,7 +181,7 @@ const Order = () => {
                         <div key={order.id} className='bg-white w-auto h-14 my-1  shadow-md flex'>
 
                             {/* <div className='flex'> */}
-                            <img className='h-12 w-12 my-auto mx-1' src="/assets/images/ban.png" alt="" />
+                            <img className='h-12 w-12 my-auto mx-1' src={order.assets} alt="" />
 
                             <div className='flex justify-between w-full'>
 

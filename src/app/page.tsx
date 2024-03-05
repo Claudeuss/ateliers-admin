@@ -1,13 +1,10 @@
 "use client";
 import ItemSparepart from '@/components/item_sparepart';
 import Order from '@/components/order';
-
 import Sidebar from '@/components/sidebar';
 import { User } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
-
 import { Fragment, useEffect, useState } from 'react';
-
 import { useRouter } from 'next/navigation';
 import { auth, db } from '../../lib/firebase/page';
 import SidebarGudang from '@/components/sidebar_gudang';
@@ -16,6 +13,7 @@ import SidebarSuper from '@/components/sidebar_super';
 
 export default function Home() {
   const { push } = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState(''); // State untuk menyimpan kategori yang dipilih
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -51,7 +49,7 @@ export default function Home() {
 
   return (
     <Fragment>
-      <SidebarSuper />
+      <Sidebar />
 
       <div className='bg-[#EAEAEA] h-screen w-full'>
         <div className='pl-28 pr-[360px]'>
@@ -60,42 +58,42 @@ export default function Home() {
               <h1>Welcome to the Main Page,!</h1>
               <h1 className='text-2xl font-semibold'>List Sparepart</h1>
               <div className='pt-3 grid grid-cols-4 gap-3 '>
-                <div className="bg-white hover:bg-[#1B24FF] py-1 pb-2  group cursor-pointer hover:shadow-lg shadow-md">
-
-                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Accesories
-                  </h3>
+                <div
+                  className={`bg-white hover:bg-[#1B24FF] py-1 pb-2 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Accesories' && 'bg-[#1B24FF]'
+                    }`}
+                  onClick={() => setSelectedCategory('Accesories')}
+                >
+                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold">Accesories</h3>
                 </div>
-                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg  shadow-md">
-
-                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Wheels
-                  </h3>
+                <div
+                  className={`bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Wheels' && 'bg-[#1B24FF]'
+                    }`}
+                  onClick={() => setSelectedCategory('Wheels')}
+                >
+                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold">Wheels</h3>
                 </div>
-                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ">
-
-                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Engine
-                  </h3>
+                <div
+                  className={`bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Engine' && 'bg-[#1B24FF]'
+                    }`}
+                  onClick={() => setSelectedCategory('Engine')}
+                >
+                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold">Engine</h3>
                 </div>
-                <div className="bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ">
-
-                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold ">Maintenance
-                  </h3>
+                <div
+                  className={`bg-white hover:bg-[#1B24FF] p-1 group cursor-pointer hover:shadow-lg shadow-md ${selectedCategory === 'Maintenance' && 'bg-[#1B24FF]'
+                    }`}
+                  onClick={() => setSelectedCategory('Maintenance')}
+                >
+                  <h3 className="text-center text-xs text-black group-hover:text-white font-semibold">Maintenance</h3>
                 </div>
-
-
-
               </div>
-              <ItemSparepart />
-
+              {/* Render ItemSparepart dengan filter berdasarkan kategori yang dipilih */}
+              <ItemSparepart category={selectedCategory} />
             </div>
-
           </div>
         </div>
       </div>
       <Order />
-
     </Fragment>
-
   );
 }
-
-

@@ -1,10 +1,10 @@
-"use client";
-import { QuerySnapshot, collection, getDocs } from 'firebase/firestore';
+import { QuerySnapshot, collection, getDocs, where, query } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { db } from '../../lib/firebase/page';
-const ItemSparepart = ({ onAddToOrder }: { onAddToOrder?: any }) => {
+
+const ItemSparepart = ({ category, onAddToOrder }: { category: string; onAddToOrder?: any }) => {
     const [sparepart, setSparepart] = useState<any[]>([]);
     const [selectedItems, setSelectedItems] = useState<any[]>([]);
     const router = useRouter();
@@ -13,20 +13,26 @@ const ItemSparepart = ({ onAddToOrder }: { onAddToOrder?: any }) => {
     useEffect(() => {
         const getSparepart = async () => {
             try {
-                const data: QuerySnapshot = await getDocs(sparepartCollectionRef);
-                setSparepart(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+                let querySnapshot: QuerySnapshot;
+                if (category) {
+                    const q = query(sparepartCollectionRef, where('category', '==', category));
+                    querySnapshot = await getDocs(q);
+                } else {
+                    querySnapshot = await getDocs(sparepartCollectionRef);
+                }
+                setSparepart(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
             } catch (error) {
                 console.error('Error fetching services:', error);
             }
         };
         getSparepart();
-    }, []);
+    }, [category]);
+
     const detailClick = async (idd: any) => {
         // Set the service ID in the URL
         router.push(`/detail_sparepart?id=${idd}`);
         // Show the update modal
     };
-
 
     return (
         <div className='grid grid-cols-4 gap-3'>
@@ -41,8 +47,7 @@ const ItemSparepart = ({ onAddToOrder }: { onAddToOrder?: any }) => {
                                     <h1 className='font-semibold line-clamp-1'>{spares.name}</h1>
                                     <p className='text-[#595959] text-xs font-semibold'>Rp. {spares.price}</p>
                                 </div>
-                                <AiOutlinePlusCircle className='text-[#595959] text-3xl my-auto'
-                                />
+                                <AiOutlinePlusCircle className='text-[#595959] text-3xl my-auto' />
                             </div>
                         </div>
                     </div>

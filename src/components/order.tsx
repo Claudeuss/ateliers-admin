@@ -12,7 +12,8 @@ import jsPDF from 'jspdf';
 
 const Order = () => {
     const ordersCollectionRef = collection(db, "orders")
-    
+
+
     const handleCustomerSelection = (customerName: any) => {
         console.log('Selected Customer:', customerName);
 

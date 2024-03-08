@@ -154,6 +154,22 @@ const sparepartpage = () => {
     };
 
     const [showDetail, setShowItem] = useState(false);
+
+    const getCategoryStyle = (category: string) => {
+        switch (category.toLowerCase()) {
+            case 'wheels':
+                return 'bg-[#F9D923] text-black';
+            case 'accesories':
+                return 'bg-[#1b24ff] text-white';
+            case 'maintenance':
+                return 'bg-[#22C55E] text-white';
+            case 'engine':
+                return 'bg-[#EF4444] text-white';
+            default:
+                return '';
+        }
+    };
+
     return (
         <>
             <SidebarGudang />
@@ -169,9 +185,11 @@ const sparepartpage = () => {
                         <div className=' w-full h-[400px] py-2 bg-white rounded-md'>
                             <div className=' flex px-5 justify-between'>
                                 <div className='flex gap-5 justify-between'>
-                                    <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Sparepart Data</p>
+                                    <p className='font-bold text-[#1b24ff] bg-[#EAEAEA] py-2 px-4 rounded'>Sparepart Data</p>
                                     <a href="/warehouse_admin/sparepart/input_spareparts">
-                                        <p className=' hover:text-[#1b24ff] hover:bg-[#EAEAEA] text-lg font-medium text-black py-1 px-2 rounded-md'>Add Sparepart</p>
+                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                            Add Sparepart
+                                        </button>
                                     </a>
                                 </div>
                                 <div className='flex gap-2'>
@@ -220,15 +238,19 @@ const sparepartpage = () => {
                                                     <td className='w-10 py-1 text-center border-r'>{index + 1}</td>
                                                     <td className='w-64 py-1 text-center border-r overflow-hidden whitespace-nowrap px-2'>{item.name}</td>
                                                     <td className=' w-64 py-1 text-center border-r'>{item.price}</td>
-                                                    <td className=' w-56 py-1 text-center border-r'>{item.category}</td>
+                                                    <td className=' w-56 py-1 text-center border-r'>
+                                                        <p className={`text-center mx-auto w-36 rounded-lg ${getCategoryStyle(item.category)}`}>
+                                                        {item.category}
+                                                        </p>
+                                                    </td>
                                                     <td className=' w-56 py-1 text-center border-r'>{item.quantity}</td>
                                                     <td className=' h-auto px-2 py-2 flex m-auto'>
-                                                        <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto'
+                                                        <div className='w-full hover:bg-blue-800 hover:text-white py-1 rounded-md m-auto text-blue-800'
                                                             onClick={() => handlePopup(item.id)}
                                                         >
                                                             <BiEdit className='mx-auto text-xl ' />
                                                         </div>
-                                                        <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto  '
+                                                        <div className='w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md m-auto text-red-500'
                                                             onClick={() => handleDelete(item.id)}
                                                         >
                                                             <BsTrash3 className='mx-auto text-xl ' />

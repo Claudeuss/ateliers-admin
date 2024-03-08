@@ -167,12 +167,12 @@ const AddPage = () => {
                     <h1 className=' text-2xl font-semibold pb-4'>Sparepart</h1>
                     <div className=' w-full h-full bg-white rounded-md py-2'>
                         <div className='flex gap-5 px-4 pb-2'>
-                            <a href="/warehouse_admin/sparepart/sparepartpage">
-                                <p className=' text-lg font-medium text-black py-1 px-2 rounded-md hover:text-[#1b24ff] hover:bg-[#EAEAEA]'>
-                                    Spareparts Data
-                                </p>
+                            <a href="../../../warehouse_admin/sparepart/sparepartpage">
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Sparepart Data
+                                </button>
                             </a>
-                            <p className=' text-lg font-medium text-[#1b24ff] bg-[#EAEAEA] py-1 px-2 rounded-md'>Add Sparepart</p>
+                            <p className=' font-bold text-[#1b24ff] bg-[#EAEAEA] py-2 px-4 rounded'>Add Sparepart</p>
                         </div>
                         <form className=' w-full border-t-2 border-black px-12 py-8' onSubmit={AddData}>
                             <div className=' flex justify-between py-2'>
@@ -306,8 +306,9 @@ const AddPage = () => {
                             <div className='flex justify-end w-full py-4'>
                                 <button
                                     type='submit'
-                                    className=' bg-[#1b24ff] py-1 w-80 rounded-md shadow-md hover:shadow-inner shadow-[#eaeaea] hover:bg-[#1b23ffe1]'>
-                                    <p className=' text-white text-lg font-medium'>Submit</p>
+                                    className='bg-[#1b23ff] hover:bg-[#1b23ff93] text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-inner'
+                                >
+                                    <p className='text-lg'>Submit</p>
                                 </button>
                             </div>
                         </form>

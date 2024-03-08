@@ -23,12 +23,12 @@ const SidebarSuper = () => {
     return (
         <div className='py-7 px-5 w-28 h-screen fixed bg-white z-20 top-0 '>
             <div className='px-2 flex flex-col justify-center items-center mb-10'>
-                <img src="c:\Users\fauzi\Downloads\Grey and White Simple Modern Monoline Beauty and Fashion Initials Logo (1)\7.png" alt="" />
+                <img src="../../../../assets/images/7.png" alt="" />
 
             </div>
 
             <div>
-                <a href="/warehouse_admin/homepage">
+                <a href="../../../SuperAdmin/">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <RxDashboard className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <p className="text-center text-[#595959] text-xs group-hover:text-white font-semibold ">Home
@@ -37,28 +37,28 @@ const SidebarSuper = () => {
                 </a>
                 {/* Menu */}
 
-                <a href="/warehouse_admin/sparepart/sparepartpage">
+                <a href="../../../SuperAdmin/supersparepart">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <LiaToolsSolid className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold "> Item
                         </h3>
                     </div>
                 </a>
-                <a href="/warehouse_admin/transaction">
+                <a href="#">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <BiTransferAlt className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold ">Activity
                         </h3>
                     </div>
                 </a>
-                <a href="/warehouse_admin/user">
+                <a href="#">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <PiUserCircleLight className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold ">User
                         </h3>
                     </div>
                 </a>
-                <a href="/warehouse_admin/user">
+                <a href="#">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <MdAttachMoney className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold ">Finance

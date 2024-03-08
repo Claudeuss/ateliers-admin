@@ -28,7 +28,7 @@ const SidebarSuper = () => {
             </div>
 
             <div>
-                <a href="/warehouse_admin/homepage">
+                <a href="/SuperAdmin">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <RxDashboard className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <p className="text-center text-[#595959] text-xs group-hover:text-white font-semibold ">Home
@@ -37,7 +37,7 @@ const SidebarSuper = () => {
                 </a>
                 {/* Menu */}
 
-                <a href="/warehouse_admin/sparepart/sparepartpage">
+                <a href="/SuperAdmin/supersparepart">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <LiaToolsSolid className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold "> Item

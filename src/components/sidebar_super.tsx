@@ -1,3 +1,4 @@
+'use client';
 import React from 'react'
 import { BiHomeAlt2 } from 'react-icons/bi';
 import { MdOutlineLogout } from 'react-icons/md';
@@ -51,7 +52,7 @@ const SidebarSuper = () => {
                         </h3>
                     </div>
                 </a>
-                <a href="#">
+                <a href="../../../SuperAdmin/user">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <PiUserCircleLight className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <h3 className="text-center text-xs text-[#595959] group-hover:text-white font-semibold ">User

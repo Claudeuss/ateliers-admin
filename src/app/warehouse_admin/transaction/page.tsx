@@ -65,7 +65,7 @@ const TransactionPage = () => {
                     </div>
                     <div className="w-full h-[500px] xl:h-[850px] bg-white my-2 rounded-md shadow-md border border-slate-200 shadow-slate-500 overflow-auto">
                         <table className="table w-full">
-                            <thead>
+                            <thead className='bg-slate-200'>
                                 <tr className="border-b border-slate-500">
                                     <th className="w-10 py-2">Id</th>
                                     <th className="w-1/4 py-2">Customer</th>
@@ -91,8 +91,8 @@ const TransactionPage = () => {
                                         <td className="text-center border-r px-2">{item.name}</td>
                                         <td className="text-center border-r">{item.quantity}</td>
                                         <td className="px-2 py-2">
-                                            <div className="w-full h-full hover:bg-red-500 hover:text-white py-1 rounded-md">
-                                                <BsTrash3 className="mx-auto text-xl" />
+                                            <div className='mx-auto w-40 h-full hover:bg-red-500 hover:text-white py-1 rounded-xl bg-[#ff000062] hover:opacity-100 text-red-500'>
+                                                <BsTrash3 className='mx-auto text-xl ' />
                                             </div>
                                         </td>
                                     </tr>

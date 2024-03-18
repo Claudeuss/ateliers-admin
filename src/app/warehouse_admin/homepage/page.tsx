@@ -58,10 +58,26 @@ const WarehouseDashboard = () => {
 
         getSpareparts();
     }, []);
+
+    const getCategoryStyle = (category: string) => {
+        switch (category.toLowerCase()) {
+            case 'wheels':
+                return 'bg-[#F9D923] text-black';
+            case 'accesories':
+                return 'bg-[#1b24ff] text-white';
+            case 'maintenance':
+                return 'bg-[#22C55E] text-white';
+            case 'engine':
+                return 'bg-[#EF4444] text-white';
+            default:
+                return '';
+        }
+    };
+    
     return (
         <>
             <SidebarGudang />
-            <div className=' h-full w-screen pl-28 bg-[#EAEAEA] overflow-x-hidden'>
+            <div className=' min-h-screen w-screen pl-28 bg-[#EAEAEA] overflow-x-hidden'>
                 <div className=' p-5 overflow-y-auto overflow-x-hidden'>
                     <p className=' text-2xl font-semibold'>
                         Dasboard
@@ -85,129 +101,52 @@ const WarehouseDashboard = () => {
                         {/* Table User */}
 
                         <div className='border bg-white p-2 rounded-lg '>
-                            <p className=' text-2xl font-semibold my-2'>User</p>
-                            <div className=' overflow-y-scroll h-[400px]'>
+                            <p className=' text-2xl font-semibold my-2'>Sparepart</p>
+                            <div className=' overflow-y-scroll min-h-[400px]'>
                                 <table className=' table w-full border border-black overflow-y-auto'>
                                     <thead className=' py-2 h-10 border bg-slate-100'>
                                         <tr>
                                             <th className=' w-10 border border-black'>
-                                                <p>Id</p>
+                                                <p>No</p>
                                             </th>
                                             <th className=' border w-[400px] border-black'>
                                                 <p>Name</p>
                                             </th>
                                             <th className=' border w-[400px] border-black'>
-                                                <p>Address</p>
+                                                <p>Price</p>
                                             </th>
                                             <th className=' border border-black'>
-                                                <p>Come</p>
+                                                <p>Category</p>
+                                            </th>
+                                            <th className=' border w-[400px] border-black'>
+                                                <p>Quantity</p>
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody className=' overflow-y-auto overflow-x-hidden h-[300px]'>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>
-                                                <p>1</p>
+                                    {spareparts.map((item, index) => (
+                                        <tr key={index} className='py-2 border-b'>
+                                            <td className='border-r border-slate-600 text-center'>
+                                                <p>{index + 1}</p>
                                             </td>
-                                            <td className=' border-r border-slate-600 px-2'>
-                                                <p>Udin Benedectus</p>
+                                            <td className='border-r border-slate-600 px-2'>
+                                                <p>{item.name}</p>
                                             </td>
-                                            <td className=' border-r border-slate-600 px-2'>
-                                                <p>Cichago</p>
+                                            <td className='border-r border-slate-600 px-2'>
+                                                <p>{item.price}</p>
                                             </td>
-                                            <td className=' border-r border-slate-600 text-center'>
-                                                <p>20x</p>
+                                            <td className='border-r border-slate-600 text-center'>
+                                                <p className={`text-center mx-auto w-36 rounded-lg ${getCategoryStyle(item.category)}`}>{item.category}</p>
+                                            </td>
+                                            <td className='border-r border-slate-600 text-center'>
+                                                <p>{item.quantity}</p>
                                             </td>
                                         </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
-                                        <tr className=' py-2 border-b'>
-                                            <td className=' border-r border-slate-600 text-center'>1</td>
-                                            <td className=' border-r border-slate-600 px-2'>Udin Benedectus</td>
-                                            <td className=' border-r border-slate-600 px-2'>Cicahem</td>
-                                            <td className=' border-r border-slate-600 text-center'>10x</td>
-                                        </tr>
+                                    ))}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

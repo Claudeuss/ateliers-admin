@@ -1,7 +1,6 @@
 "use client";
 import Order from '@/components/order';
 import Sidebar from '@/components/sidebar';
-
 import Carousel from '@/components/Carousel';
 import React, { useEffect, useState } from 'react';
 import { BsFillArrowLeftCircleFill } from 'react-icons/bs';

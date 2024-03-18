@@ -1,51 +1,40 @@
 'use client';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useState } from 'react';
 import { auth, db } from '../../../lib/firebase/page';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
+import { MdOutlineEmail } from "react-icons/md";
+import { FaRegUser } from "react-icons/fa";
+import { GoLock } from "react-icons/go";
+import { PiOfficeChairBold } from "react-icons/pi";
 
 
-const Page = () => {
+
+const RegisterPage = () => {
     const { push } = useRouter();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-
-
+    const [role, setRole] = useState("");
+    const [name, setName] = useState("");
 
     const onSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Assuming your database structure has a collection 'accounts' and each document has 'email' and 'role' fields
+            // Save user role to the database
             const userDocRef = doc(db, 'account', user.uid);
-            const userDocSnapshot = await getDoc(userDocRef);
+            await setDoc(userDocRef, { email, role, name });
 
-            if (userDocSnapshot.exists()) {
-                const userRole = userDocSnapshot.data().role;
+            console.log('User successfully registered.');
 
-                console.log('User Role:', userRole);
-
-                // Redirect based on user role
-                if (userRole === 'kasir') {
-                    push('/');
-                    console.log('Redirecting to /');
-                } else if (userRole === 'gudang') {
-                    push('/warehouse_admin/homepage');
-                    console.log('Redirecting to /warehouse');
-                } else {
-                    console.log('Unhandled role:', userRole);
-                    // Handle other roles or no role as needed
-                }
-            } else {
-                console.log('User data does not exist in the database');
-            }
+            // Redirect to login_admin page after successful registration
+            push('/login_admin');
         } catch (error) {
             const errorCode = error;
             const errorMessage = error;
@@ -55,7 +44,9 @@ const Page = () => {
 
         console.log('onSubmit');
         console.log(email);
+        console.log(name);
         console.log(password);
+        console.log(role);
     };
 
     return (
@@ -80,17 +71,12 @@ const Page = () => {
                         <div className='absolute mt-60 ml-20 mr-28'>
                             <h1 className='text-3xl text-white font-semibold pb-2 pt-8'>Welcome to Ateliers</h1>
 
-                            <p className='text-l text-white'>Disini adalah tempat login bagi admin ateliers.go silahkan login untuk mengakses halaman yang sesuai dengan pekerjaan anda Terima Kasih..</p>
-
-
+                            <p className='text-l text-white'>Disini adalah tempat register bagi admin ateliers.go silahkan login untuk mengakses halaman yang sesuai dengan pekerjaan anda Terima Kasih..</p>
 
                         </div>
-
-
-
                     </div>
                     <div className='mr-10'>
-                        <div className='flex justify-center mt-20'>
+                        <div className='flex justify-center mt-10'>
                             <img className='w-20 h-20' src="/assets/images/7.png" alt="" />
 
                         </div>
@@ -100,7 +86,7 @@ const Page = () => {
                         <form className='px-24 py-20' onSubmit={onSubmit}>
                             <div className='pb-2'>
                                 <div className='flex border-b border-black '>
-                                    <img className='my-auto h-5 w-5' src="assets/images/imel.png" alt="" />
+                                    <MdOutlineEmail classname="w-5 h-5 my-auto" />
                                     <input className='pl-2 w-full text-black py-2 outline-none focus:none'
                                         type="email"
                                         placeholder="Email"
@@ -109,10 +95,22 @@ const Page = () => {
                                     />
                                 </div>
                             </div>
-                            <div className='pb-10'>
-                                <div className='flex border-b border-black'>
-                                    <img className='my-auto h-5 w-5' src="assets/images/pass.png" alt="" />
-                                    <input className='pl-2 w-full text-black py-2  outline-none focus:none'
+                            <div className='pb-2'>
+                                <div className='flex border-b border-black '>
+                                    <FaRegUser classname="w-5 h-5 my-auto" />
+                                    <input className='pl-2 w-full text-black py-2 outline-none focus:none'
+                                        type="text"
+                                        placeholder="Name"
+                                        id="name"
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className='pb-2'>
+                                <div className='flex border-b border-black '>
+                                    <GoLock classname="my-auto h-5 w-5" />
+
+                                    <input className='pl-2 w-full text-black py-2 outline-none focus:none'
                                         type="password"
                                         placeholder="Password"
                                         id="password"
@@ -120,17 +118,23 @@ const Page = () => {
                                     />
                                 </div>
                             </div>
+                            <div className='pb-10'>
+                                <div className='flex border-b border-black '>
+                                    <PiOfficeChairBold classname="my-auto w-5 h-5" />
+                                    <input className='pl-2 w-full text-black py-2 outline-none focus:none'
+                                        type="text"
+                                        placeholder="Role"
+                                        id="role"
+                                        onChange={(e) => setRole(e.target.value)}
+                                    />
+                                </div>
+                            </div>
                             <div className='flex justify-center mb-5'>
-                                <button className="tracking-wider bg-[#1B24FF] text-[#ffffff] py-3 px-6 font-mono font-black hover:bg-black hover:text-white text-center rounded-full transition-all duration-500 w-full"><a href="/" >
+                                <button className="tracking-wider bg-[#1B24FF] text-[#ffffff] py-3 px-6 font-mono font-black hover:bg-black hover:text-white text-center rounded-full transition-all duration-500 w-full">
                                     Confirm
-                                </a>
                                 </button>
                             </div >
-                            <a className='flex justify-center' href="/register_admin"><p className='font-semibold'>Create Account.</p></a>
-
-
-
-
+                            <a className='flex justify-center' href="/login_admin"><p className='font-semibold'>Login.</p></a>
 
                         </form>
 
@@ -142,4 +146,4 @@ const Page = () => {
     );
 }
 
-export default Page;
+export default RegisterPage;

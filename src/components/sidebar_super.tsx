@@ -29,7 +29,7 @@ const SidebarSuper = () => {
             </div>
 
             <div>
-                <a href="../../../SuperAdmin/">
+                <a href="../../../SuperAdmin">
                     <div className="items-center hover:bg-[#1B24FF] p-1 rounded-md group cursor-pointer hover:shadow-lg mb-3">
                         <RxDashboard className="text-[#595959] group-hover:text-white mx-auto text-4xl" />
                         <p className="text-center text-[#595959] text-xs group-hover:text-white font-semibold ">Home

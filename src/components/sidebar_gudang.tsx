@@ -13,7 +13,7 @@ const SidebarGudang = () => {
     return (
         <div className='py-7 px-5 w-28 h-screen fixed bg-white z-40 top-0 '>
             <div className='px-2 flex flex-col justify-center items-center mb-10'>
-                <Image src='../../../assets/images/7.png' width={50} height={50}/>
+                <Image src='../../../assets/images/7.png' width={50} height={50} />
             </div>
 
             <div>
